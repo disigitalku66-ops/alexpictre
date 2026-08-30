@@ -1,6 +1,7 @@
 "use client";
 
-import { Clock, Mail, MapPin, MessageCircle, ShieldCheck } from "lucide-react";
+import { Clock, Mail, MapPin, ShieldCheck } from "lucide-react";
+import { WhatsAppIcon } from "@/components/shared/whatsapp-icon";
 import { CATEGORIES } from "@/lib/catalog";
 import { Link } from "@/lib/router";
 import { SITE } from "@/lib/site";
@@ -9,7 +10,7 @@ import { quickChatUrl } from "@/lib/whatsapp";
 const EXPLORE_LINKS = [
   { to: "/", label: "Beranda" },
   { to: "/katalog", label: "Katalog" },
-  { to: "/langganan", label: "Paket Retainer" },
+  { to: "/langganan", label: "Paket Bulanan" },
   { to: "/portofolio", label: "Portofolio" },
   { to: "/lacak-pesanan", label: "Lacak Pesanan" },
   { to: "/faq", label: "FAQ" },
@@ -50,7 +51,8 @@ export function SiteFooter() {
             </span>
           </div>
           <p className="mt-3 text-sm leading-relaxed text-stone-400">
-            {SITE.tagline} — harga transparan ala marketplace, kualitas & pelayanan ala agensi.
+            Layanan kreatif untuk membantu bisnis tampil lebih profesional melalui desain,
+            website, dan video komersial.
           </p>
           <div className="mt-4 space-y-2.5 text-sm">
             <p className="flex items-start gap-2">
@@ -93,7 +95,7 @@ export function SiteFooter() {
         </nav>
 
         {/* Kolom 4: Kontak */}
-        <div>
+        <div id="kontak" className="scroll-mt-32">
           <h3 className="text-sm font-bold uppercase tracking-wide text-stone-100">Hubungi Kami</h3>
           <ul className="mt-4 space-y-2.5 text-sm">
             <li>
@@ -103,7 +105,7 @@ export function SiteFooter() {
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 text-stone-400 transition-colors hover:text-amber-400"
               >
-                <MessageCircle className="h-4 w-4 text-emerald-500" aria-hidden />
+                <WhatsAppIcon className="h-4 w-4 text-[#25D366]" />
                 {SITE.phoneDisplay}
               </a>
             </li>
@@ -114,14 +116,6 @@ export function SiteFooter() {
               </a>
             </li>
           </ul>
-          <div className="mt-4 rounded-lg border border-stone-800 bg-stone-950/60 p-3">
-            <p className="text-xs font-semibold text-stone-200">Pembayaran Transfer Bank</p>
-            <p className="mt-1 text-xs leading-relaxed text-stone-400">
-              {SITE.bank.name} · {SITE.bank.account}
-              <br />
-              a.n. {SITE.bank.holder}
-            </p>
-          </div>
         </div>
       </div>
 

@@ -5,6 +5,8 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Img } from "@/components/shared/img";
 import { AddToCartButton } from "@/components/shared/add-to-cart-button";
+import { WhatsAppIcon } from "@/components/shared/whatsapp-icon";
+import { useBriefStore } from "@/lib/brief-store";
 import { useWishlistStore, useMounted } from "@/lib/cart-store";
 import { BADGE_LABEL, formatIDR, type CatalogItem } from "@/lib/catalog";
 import { Link } from "@/lib/router";
@@ -107,7 +109,22 @@ export function ProductCard({ item, variant = "full", className }: ProductCardPr
             </div>
             <p className="mt-2 line-clamp-2 text-xs leading-relaxed text-muted-foreground">{item.short}</p>
             <div className="mt-3 flex-1" />
-            <AddToCartButton slug={item.slug} className="h-9 w-full text-xs sm:h-10 sm:text-sm" size="sm" />
+            <div className="flex items-center gap-2">
+              <AddToCartButton slug={item.slug} className="h-9 flex-1 text-xs sm:h-10 sm:text-sm" size="sm" />
+              <Button
+                variant="outline"
+                size="sm"
+                className="h-9 w-10 shrink-0 border-emerald-300 p-0 text-emerald-600 hover:bg-emerald-50 hover:text-emerald-700 dark:border-emerald-900 dark:text-emerald-400 dark:hover:bg-emerald-950 sm:h-10 sm:w-11"
+                aria-label={`Tanya cepat ${item.name} via WhatsApp`}
+                title="Tanya cepat via WhatsApp"
+                onClick={(e) => {
+                  e.preventDefault();
+                  useBriefStore.getState().show({ slug: item.slug });
+                }}
+              >
+                <WhatsAppIcon className="h-4 w-4" />
+              </Button>
+            </div>
           </>
         )}
       </div>

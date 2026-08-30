@@ -45,6 +45,7 @@ import {
   CATALOG,
   CATEGORIES,
   POPULAR_SLUGS,
+  getCollection,
   getCategory,
   type CatalogItem,
   type CategoryId,
@@ -65,6 +66,8 @@ interface CatalogFilters {
   cat: CategoryFilter;
   cheap: boolean;
   sort: SortKey;
+  /** ID koleksi cross-category (cth: "ad-creative") — null = nonaktif. */
+  collection: string | null;
 }
 
 const SORT_OPTIONS: { value: SortKey; label: string }[] = [
@@ -204,18 +207,22 @@ export function CatalogPage() {
       catParam !== null && CATEGORIES.some((c) => c.id === catParam)
         ? (catParam as CategoryId)
         : "all";
+    const koleksiParam = query.get("koleksi");
     return {
       q: (query.get("q") ?? "").trim(),
       cat,
       cheap: false,
       sort: "populer",
+      collection: koleksiParam && getCollection(koleksiParam) ? koleksiParam : null,
       ...activeLocal,
     };
   }, [query, activeLocal]);
 
   const filtered = useMemo(() => {
+    const collectionSlugs = filters.collection ? getCollection(filters.collection)?.slugs : null;
     const items = CATALOG.filter(
       (i) =>
+        (!collectionSlugs || collectionSlugs.includes(i.slug)) &&
         (filters.cat === "all" || i.category === filters.cat) &&
         (!filters.cheap || (i.price > 0 && i.price < CHEAP_LIMIT)) &&
         matchesQuery(i, filters.q)
@@ -232,7 +239,7 @@ export function CatalogPage() {
   }
 
   function resetFilters() {
-    setLocal({ qs, data: { q: "", cat: "all", cheap: false } });
+    setLocal({ qs, data: { q: "", cat: "all", cheap: false, collection: null } });
     setMore({ qs, extra: 0 });
   }
 
@@ -241,6 +248,7 @@ export function CatalogPage() {
   // Efek ini tidak memanggil setState (aman untuk react-hooks/set-state-in-effect).
   const activeCatId: CategoryId | null = filters.cat !== "all" ? filters.cat : null;
   const activeCategory = activeCatId !== null ? getCategory(activeCatId) : undefined;
+  const activeCollection = filters.collection ? getCollection(filters.collection) : undefined;
 
   useEffect(() => {
     if (activeCatId) trackCategoryView(activeCatId);
@@ -271,6 +279,7 @@ export function CatalogPage() {
         <p className="mt-1 text-sm text-muted-foreground">
           {filtered.length} layanan ditemukan
           {filters.q ? ` untuk kata kunci “${filters.q}”` : ""}
+          {activeCollection ? ` di koleksi ${activeCollection.name}` : ""}
           {activeCategory ? ` di kategori ${activeCategory.name}` : ""}
         </p>
       </div>
@@ -318,14 +327,14 @@ export function CatalogPage() {
             role="group"
             aria-label="Filter kategori"
           >
-            <CategoryChip active={filters.cat === "all"} onClick={() => patchFilters({ cat: "all" })}>
+            <CategoryChip active={filters.cat === "all" && !filters.collection} onClick={() => patchFilters({ cat: "all", collection: null })}>
               Semua
             </CategoryChip>
             {CATEGORIES.map((category) => (
               <CategoryChip
                 key={category.id}
-                active={filters.cat === category.id}
-                onClick={() => patchFilters({ cat: category.id })}
+                active={filters.cat === category.id && !filters.collection}
+                onClick={() => patchFilters({ cat: category.id, collection: null })}
               >
                 {category.name}
               </CategoryChip>

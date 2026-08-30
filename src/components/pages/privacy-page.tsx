@@ -1,7 +1,8 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Mail, MessageCircle } from "lucide-react";
+import { Mail } from "lucide-react";
+import { WhatsAppIcon } from "@/components/shared/whatsapp-icon";
 import type { ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -246,7 +247,7 @@ export function PrivacyPage() {
               </Button>
               <Button
                 asChild
-                className="h-10 bg-emerald-600 text-white hover:bg-emerald-700"
+                className="h-10 bg-[#25D366] text-white hover:bg-[#1eb757]"
               >
                 <a
                   href={quickChatUrl()}
@@ -254,7 +255,7 @@ export function PrivacyPage() {
                   rel="noopener noreferrer"
                   aria-label="Hubungi AlexPicture melalui WhatsApp"
                 >
-                  <MessageCircle className="h-4 w-4" aria-hidden />
+                  <WhatsAppIcon className="h-4 w-4" />
                   WhatsApp
                 </a>
               </Button>

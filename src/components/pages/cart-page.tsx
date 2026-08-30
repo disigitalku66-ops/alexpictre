@@ -14,7 +14,6 @@ import { toast } from "sonner";
 import {
   Loader2,
   Lock,
-  MessageCircle,
   Minus,
   Plus,
   ShoppingCart,
@@ -22,6 +21,7 @@ import {
   TriangleAlert,
 } from "lucide-react";
 
+import { WhatsAppIcon } from "@/components/shared/whatsapp-icon";
 import { Img } from "@/components/shared/img";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import {
@@ -254,7 +254,7 @@ function EmptyCart() {
         <ShoppingCart className="h-14 w-14 text-stone-400 dark:text-stone-500" />
       </div>
       <h1 className="mt-6 text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
-        Keranjangmu masih kosong
+        Keranjang Anda masih kosong
       </h1>
       <p className="mt-2 max-w-md text-sm leading-relaxed text-muted-foreground">
         Pilih layanan desain, video, atau website dari katalog — harga transparan, tanpa biaya
@@ -262,10 +262,10 @@ function EmptyCart() {
       </p>
       <div className="mt-6 flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
         <Button asChild size="lg" className="h-12 px-6">
-          <Link to="/katalog">Jelajahi Katalog</Link>
+          <Link to="/katalog">Lihat Katalog</Link>
         </Button>
         <Button asChild variant="outline" size="lg" className="h-12 px-6">
-          <Link to="/langganan">Lihat Paket Retainer</Link>
+          <Link to="/langganan">Lihat Paket Bulanan</Link>
         </Button>
       </div>
     </motion.div>
@@ -666,7 +666,7 @@ export function CartPage() {
                 <Button
                   type="submit"
                   disabled={!canCheckout}
-                  className="h-12 w-full bg-emerald-600 text-base font-semibold text-white hover:bg-emerald-700"
+                  className="h-12 w-full bg-[#25D366] text-base font-semibold text-white hover:bg-[#1eb757]"
                 >
                   {loading ? (
                     <>
@@ -675,7 +675,7 @@ export function CartPage() {
                     </>
                   ) : (
                     <>
-                      <MessageCircle className="h-5 w-5" aria-hidden />
+                      <WhatsAppIcon className="h-5 w-5" />
                       Checkout via WhatsApp
                     </>
                   )}

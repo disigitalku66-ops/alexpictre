@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { MessageCircle } from "lucide-react";
+import { WhatsAppIcon } from "@/components/shared/whatsapp-icon";
 import type { ReactNode } from "react";
 import {
   Accordion,
@@ -172,7 +172,7 @@ export function FaqPage() {
                 </p>
                 <Button
                   asChild
-                  className="h-11 bg-emerald-600 px-5 text-white hover:bg-emerald-700"
+                  className="h-11 bg-[#25D366] px-5 text-white hover:bg-[#1eb757]"
                 >
                   <a
                     href={quickChatUrl()}
@@ -180,7 +180,7 @@ export function FaqPage() {
                     rel="noopener noreferrer"
                     aria-label="Tanyakan pertanyaan Anda melalui WhatsApp"
                   >
-                    <MessageCircle className="h-4 w-4" aria-hidden />
+                    <WhatsAppIcon className="h-4 w-4" />
                     Tanya via WhatsApp
                   </a>
                 </Button>

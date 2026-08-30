@@ -1,7 +1,16 @@
 "use client";
 
+// ============================================================
+// SITE HEADER — AlexPicture Marketplace (revisi R3 / D-R3-01…11)
+// Desktop: top bar + logo/search/aksi + nav row dengan MEGA MENU
+// "Layanan" (5 kolom bergambar), Katalog, Portofolio, Lacak
+// Pesanan, Tentang, Kontak (anchor footer) + pill WhatsApp resmi.
+// Mobile: drawer Sheet + bottom nav (terpisah).
+// ============================================================
+
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
+  ChevronDown,
   ChevronRight,
   CircleHelp,
   Clock,
@@ -13,11 +22,11 @@ import {
   Info,
   LayoutGrid,
   Menu,
-  MessageCircle,
   Moon,
   Package,
   PackageSearch,
   Palette,
+  Phone,
   Puzzle,
   Search,
   ShoppingCart,
@@ -37,8 +46,9 @@ import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Img } from "@/components/shared/img";
+import { WhatsAppIcon } from "@/components/shared/whatsapp-icon";
 import { useCartStore, useMounted, useWishlistStore } from "@/lib/cart-store";
-import { CATALOG, CATEGORIES, formatIDR, getItem } from "@/lib/catalog";
+import { CATALOG, CATEGORIES, formatIDR, getItem, type CategoryId } from "@/lib/catalog";
 import { Link, navigate } from "@/lib/router";
 import { SITE } from "@/lib/site";
 import { quickChatUrl } from "@/lib/whatsapp";
@@ -56,6 +66,12 @@ const CATEGORY_ICONS: Record<string, React.ComponentType<{ className?: string }>
 function CategoryIcon({ id, className }: { id: string; className?: string }) {
   const Icon = CATEGORY_ICONS[id] || LayoutGrid;
   return <Icon className={className} aria-hidden />;
+}
+
+/** Scroll halus ke blok kontak di footer (D-R3-11). */
+function scrollToKontak(e: React.MouseEvent<HTMLAnchorElement>) {
+  e.preventDefault();
+  document.getElementById("kontak")?.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
 // ---------- Logo ----------
@@ -126,7 +142,7 @@ function SearchBox({ className, autoFocus }: { className?: string; autoFocus?: b
             setOpen(true);
           }}
           onFocus={() => setOpen(true)}
-          placeholder="Cari layanan… cth: logo, feed IG, landing page"
+          placeholder="Cari layanan desain, website, atau video..."
           className="h-10 rounded-full border-stone-300 bg-white pl-9 pr-4 text-sm shadow-sm placeholder:text-stone-400 focus-visible:ring-amber-500/40 dark:border-stone-700 dark:bg-stone-900"
           autoComplete="off"
         />
@@ -180,60 +196,100 @@ function SearchBox({ className, autoFocus }: { className?: string; autoFocus?: b
   );
 }
 
-// ---------- Mega menu per kategori ----------
-function MegaMenu({ catId }: { catId: string }) {
-  const cat = CATEGORIES.find((c) => c.id === catId);
-  if (!cat) return null;
-  const items = CATALOG.filter((i) => i.category === catId);
-  if (items.length === 0) return null;
+// ---------- MEGA MENU "Layanan" — 5 kolom bergambar ----------
+// Tiap kolom: gambar kategori + 4 layanan teratas (urut POPULAR)
+// + tautan "Lihat Semua". Koleksi Ad Creative masuk kartu beranda.
 
+/** 4 layanan teratas per kategori (populer dulu, fallback urutan katalog). */
+const TOP_BY_CATEGORY: Record<CategoryId, string[]> = (() => {
+  const rank = (slug: string) => {
+    const order = ["desain-feed-instagram", "logo-starter", "feed-instagram-carousel", "video-ugc-20", "landing-page-fullstack", "materi-iklan-meta", "ecommerce-umkm", "video-company-profile-60"];
+    const idx = order.indexOf(slug);
+    return idx === -1 ? Number.MAX_SAFE_INTEGER : idx;
+  };
+  const out = {} as Record<CategoryId, string[]>;
+  for (const c of CATEGORIES) {
+    out[c.id] = CATALOG.filter((i) => i.category === c.id)
+      .sort((a, b) => rank(a.slug) - rank(b.slug))
+      .slice(0, 4)
+      .map((i) => i.slug);
+  }
+  return out;
+})();
+
+function MegaMenu() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <button className="inline-flex items-center gap-1 rounded-md px-3 py-2 text-sm font-medium text-foreground/90 transition-colors hover:bg-accent hover:text-foreground">
-          <CategoryIcon id={catId} className="h-4 w-4 text-primary" />
-          {cat.name}
+        <button className="inline-flex items-center gap-1 rounded-md px-3 py-2 text-sm font-semibold text-foreground transition-colors hover:bg-accent hover:text-primary">
+          <LayoutGrid className="h-4 w-4 text-primary" aria-hidden />
+          Layanan
+          <ChevronDown className="h-3.5 w-3.5 text-muted-foreground" aria-hidden />
         </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent
         align="start"
         sideOffset={8}
-        className="w-[520px] p-0"
+        className="w-[min(94vw,980px)] p-0"
       >
-        <div className="grid grid-cols-[1fr_180px] gap-0">
-          <div className="max-h-[420px] overflow-y-auto scrollbar-slim p-3">
-            <p className="mb-2 px-1 text-xs font-semibold uppercase tracking-wide text-muted-foreground">{cat.blurb}</p>
-            <ul className="grid grid-cols-1 gap-0.5">
-              {items.map((item) => (
-                <li key={item.slug}>
-                  <Link
-                    to={`/produk/${item.slug}`}
-                    className="flex items-center justify-between gap-3 rounded-lg px-3 py-2 hover:bg-accent"
-                  >
-                    <span className="min-w-0">
-                      <span className="block truncate text-sm font-medium text-foreground">{item.name}</span>
-                      <span className="block text-xs text-muted-foreground">{item.unit}</span>
-                    </span>
-                    <span className="shrink-0 text-sm font-bold tabular-nums text-primary">
-                      {item.price === 0 ? "35%" : formatIDR(item.price)}
-                    </span>
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div className="flex flex-col border-l bg-stone-50/60 p-3 dark:bg-stone-900/60">
-            <Img src={cat.image} alt={cat.name} ratio="1/1" className="w-full rounded-lg" sizes="180px" />
-            <p className="mt-3 text-sm font-semibold text-foreground">{cat.name}</p>
-            <p className="mt-1 line-clamp-3 text-xs leading-relaxed text-muted-foreground">{cat.blurb}</p>
-            <Link
-              to={`/katalog?kategori=${cat.id}`}
-              className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-primary hover:underline"
-            >
-              Lihat kategori
-              <ChevronRight className="h-4 w-4" aria-hidden />
-            </Link>
-          </div>
+        <div className="grid grid-cols-2 gap-2 p-2 sm:grid-cols-3 lg:grid-cols-5">
+          {CATEGORIES.map((cat) => {
+            const items = TOP_BY_CATEGORY[cat.id].map(getItem).filter((i) => i !== undefined);
+            const total = CATALOG.filter((i) => i.category === cat.id).length;
+            return (
+              <div key={cat.id} className="flex flex-col rounded-xl border bg-card/60 p-2">
+                <Img
+                  src={cat.image}
+                  alt={`Kategori ${cat.name}`}
+                  ratio="16/9"
+                  className="w-full rounded-lg"
+                  sizes="(max-width: 640px) 45vw, (max-width: 1024px) 30vw, 190px"
+                />
+                <Link
+                  to={`/katalog?kategori=${cat.id}`}
+                  className="mt-2 flex items-center gap-1.5 px-1 text-sm font-bold text-foreground hover:text-primary"
+                >
+                  <CategoryIcon id={cat.id} className="h-3.5 w-3.5 shrink-0 text-primary" />
+                  {cat.name}
+                </Link>
+                <ul className="mt-1.5 flex-1">
+                  {items.map((item) => (
+                    <li key={item.slug}>
+                      <Link
+                        to={`/produk/${item.slug}`}
+                        className="block truncate rounded-md px-2 py-1.5 text-xs text-foreground/85 hover:bg-accent hover:text-primary"
+                        title={item.name}
+                      >
+                        {item.name}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+                <Link
+                  to={`/katalog?kategori=${cat.id}`}
+                  className="mt-1 inline-flex items-center gap-0.5 px-1 pb-1 pt-2 text-xs font-semibold text-primary hover:underline"
+                >
+                  Lihat Semua ({total})
+                  <ChevronRight className="h-3 w-3" aria-hidden />
+                </Link>
+              </div>
+            );
+          })}
+        </div>
+        {/* Strip bawah — bantuan memilih */}
+        <div className="flex items-center justify-between gap-3 border-t bg-stone-50/70 px-4 py-2.5 dark:bg-stone-900/70">
+          <p className="text-xs text-muted-foreground">
+            Tidak yakin harus mulai dari mana? Tim kami bantu memilih.
+          </p>
+          <a
+            href={quickChatUrl()}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-[#25D366] px-3 py-1.5 text-xs font-semibold text-white hover:bg-[#1eb757]"
+          >
+            <WhatsAppIcon className="h-3.5 w-3.5" />
+            Chat WhatsApp
+          </a>
         </div>
       </DropdownMenuContent>
     </DropdownMenu>
@@ -280,7 +336,7 @@ function WishlistSheet() {
             <Heart className="h-12 w-12 text-stone-300 dark:text-stone-700" aria-hidden />
             <p className="text-sm text-muted-foreground">Belum ada layanan yang disimpan. Tekan ikon hati pada produk untuk menyimpannya di sini.</p>
             <Button asChild variant="outline" className="mt-2">
-              <Link to="/katalog">Jelajahi Katalog</Link>
+              <Link to="/katalog">Lihat Katalog</Link>
             </Button>
           </div>
         ) : (
@@ -365,7 +421,7 @@ export function SiteHeader() {
       <div className="hidden bg-stone-900 text-stone-300 dark:bg-black md:block">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-1.5 text-xs lg:px-8">
           <p className="truncate">
-            <span className="font-semibold text-amber-400">Gratis konsultasi brief pertama</span> — langsung chat tim kami
+            <span className="font-semibold text-amber-400">Konsultasi awal tanpa biaya</span> — langsung chat tim kami
           </p>
           <div className="flex shrink-0 items-center gap-4">
             <span className="inline-flex items-center gap-1.5">
@@ -424,11 +480,12 @@ export function SiteHeader() {
                   <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">Lainnya</p>
                   <ul className="space-y-1">
                     {[
-                      { to: "/langganan", label: "Paket Retainer", icon: Package },
+                      { to: "/katalog", label: "Katalog", icon: LayoutGrid },
                       { to: "/portofolio", label: "Portofolio", icon: ImageIcon },
                       { to: "/lacak-pesanan", label: "Lacak Pesanan", icon: PackageSearch },
                       { to: "/faq", label: "FAQ", icon: CircleHelp },
                       { to: "/tentang", label: "Tentang Kami", icon: Info },
+                      { to: "/langganan", label: "Paket Bulanan", icon: Package },
                     ].map((l) => (
                       <li key={l.to}>
                         <Link
@@ -441,11 +498,30 @@ export function SiteHeader() {
                         </Link>
                       </li>
                     ))}
+                    <li>
+                      <a
+                        href="#kontak"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setMenuOpen(false);
+                          // Tutup drawer dulu, lalu scroll setelah animasi
+                          setTimeout(() => {
+                            document.getElementById("kontak")?.scrollIntoView({ behavior: "smooth" });
+                          }, 250);
+                        }}
+                        className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-accent"
+                      >
+                        <span className="grid h-4 w-4 place-items-center">
+                          <Phone className="h-4 w-4 text-primary" aria-hidden />
+                        </span>
+                        Kontak
+                      </a>
+                    </li>
                   </ul>
                   <Separator className="my-4" />
-                  <Button asChild className="w-full bg-emerald-600 text-white hover:bg-emerald-700">
+                  <Button asChild className="w-full bg-[#25D366] text-white hover:bg-[#1eb757]">
                     <a href={quickChatUrl()} target="_blank" rel="noopener noreferrer">
-                      <MessageCircle className="h-4 w-4" aria-hidden /> Chat WhatsApp
+                      <WhatsAppIcon className="h-4 w-4" /> Chat WhatsApp
                     </a>
                   </Button>
                 </nav>
@@ -504,36 +580,49 @@ export function SiteHeader() {
           )}
         </div>
 
-        {/* Nav row desktop (mega menu) */}
-        <nav className="hidden border-t md:block" aria-label="Navigasi kategori">
-          <div className="mx-auto flex max-w-7xl items-center gap-1 px-4 lg:px-8">
-            {CATEGORIES.filter((c) => c.id !== "retainer").map((c) => (
-              <MegaMenu key={c.id} catId={c.id} />
-            ))}
+        {/* Nav row desktop — mega menu + halaman (R3 poin 1) */}
+        <nav className="hidden border-t md:block" aria-label="Navigasi utama">
+          <div className="mx-auto flex max-w-7xl items-center gap-0.5 px-4 lg:px-8">
+            <MegaMenu />
+            <Separator orientation="vertical" className="mx-1.5 h-5" />
             <Link
-              to="/langganan"
+              to="/katalog"
               className="inline-flex items-center gap-1 rounded-md px-3 py-2 text-sm font-medium text-foreground/90 transition-colors hover:bg-accent hover:text-foreground"
             >
-              <CategoryIcon id="retainer" className="h-4 w-4 text-primary" />
-              Paket Retainer
+              Katalog
             </Link>
-            <Separator orientation="vertical" className="mx-2 h-5" />
-            <Link to="/portofolio" className="rounded-md px-3 py-2 text-sm font-medium text-foreground/90 hover:bg-accent hover:text-foreground">
+            <Link
+              to="/portofolio"
+              className="rounded-md px-3 py-2 text-sm font-medium text-foreground/90 transition-colors hover:bg-accent hover:text-foreground"
+            >
               Portofolio
             </Link>
-            <Link to="/lacak-pesanan" className="rounded-md px-3 py-2 text-sm font-medium text-foreground/90 hover:bg-accent hover:text-foreground">
+            <Link
+              to="/lacak-pesanan"
+              className="rounded-md px-3 py-2 text-sm font-medium text-foreground/90 transition-colors hover:bg-accent hover:text-foreground"
+            >
               Lacak Pesanan
             </Link>
-            <Link to="/faq" className="rounded-md px-3 py-2 text-sm font-medium text-foreground/90 hover:bg-accent hover:text-foreground">
-              FAQ
+            <Link
+              to="/tentang"
+              className="rounded-md px-3 py-2 text-sm font-medium text-foreground/90 transition-colors hover:bg-accent hover:text-foreground"
+            >
+              Tentang
             </Link>
+            <a
+              href="#kontak"
+              onClick={scrollToKontak}
+              className="rounded-md px-3 py-2 text-sm font-medium text-foreground/90 transition-colors hover:bg-accent hover:text-foreground"
+            >
+              Kontak
+            </a>
             <a
               href={quickChatUrl()}
               target="_blank"
               rel="noopener noreferrer"
-              className="ml-auto inline-flex items-center gap-1.5 rounded-full bg-emerald-600 px-4 py-1.5 text-sm font-semibold text-white transition-colors hover:bg-emerald-700"
+              className="ml-auto inline-flex items-center gap-1.5 rounded-full bg-[#25D366] px-4 py-1.5 text-sm font-semibold text-white transition-colors hover:bg-[#1eb757]"
             >
-              <MessageCircle className="h-4 w-4" aria-hidden />
+              <WhatsAppIcon className="h-4 w-4" />
               Chat WhatsApp
             </a>
           </div>

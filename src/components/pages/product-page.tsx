@@ -19,7 +19,6 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import {
   Check,
-  MessageCircle,
   MessageCircleQuestion,
   Minus,
   PackageSearch,
@@ -29,6 +28,7 @@ import {
 import { AddToCartButton } from "@/components/shared/add-to-cart-button";
 import { Img } from "@/components/shared/img";
 import { SectionHeading } from "@/components/shared/section-heading";
+import { WhatsAppIcon } from "@/components/shared/whatsapp-icon";
 import {
   Accordion,
   AccordionContent,
@@ -551,7 +551,7 @@ function ProductDetail({ item }: { item: CatalogItem }) {
                 onClick={orderNow}
                 className="h-12 w-full border-emerald-300 text-emerald-700 hover:bg-emerald-50 hover:text-emerald-800 dark:border-emerald-700 dark:text-emerald-400 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-300"
               >
-                <MessageCircle className="h-5 w-5" aria-hidden />
+                <WhatsAppIcon className="h-5 w-5" />
                 Pesan Sekarang via WhatsApp
               </Button>
               <p className="flex items-start gap-2 pt-0.5 text-xs text-muted-foreground">
@@ -662,7 +662,7 @@ function ProductDetail({ item }: { item: CatalogItem }) {
             aria-label="Pesan sekarang via WhatsApp"
             className="h-11 w-11 shrink-0 border-emerald-300 text-emerald-700 hover:bg-emerald-50 hover:text-emerald-800 dark:border-emerald-700 dark:text-emerald-400 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-300"
           >
-            <MessageCircle className="h-5 w-5" aria-hidden />
+            <WhatsAppIcon className="h-5 w-5" />
           </Button>
         </div>
       </div>

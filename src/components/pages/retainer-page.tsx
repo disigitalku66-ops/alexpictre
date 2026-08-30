@@ -1,9 +1,10 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { CalendarCheck, CalendarDays, Check, Clock, MessageCircle, RotateCcw } from "lucide-react";
+import { CalendarCheck, CalendarDays, Check, Clock, RotateCcw } from "lucide-react";
 import type { ReactNode } from "react";
 import { AddToCartButton } from "@/components/shared/add-to-cart-button";
+import { WhatsAppIcon } from "@/components/shared/whatsapp-icon";
 import {
   Accordion,
   AccordionContent,
@@ -28,7 +29,7 @@ import { quickChatUrl } from "@/lib/whatsapp";
 import { cn } from "@/lib/utils";
 
 // ============================================================
-// HALAMAN LANGGANAN (#/langganan) — Paket Retainer Bulanan
+// HALAMAN LANGGANAN (#/langganan) — Paket Bulanan (Retainer)
 // Data plan dari PLANS (@/lib/catalog); baris perbandingan
 // fitur melengkapi PRD v3.0 §7.E.
 // ============================================================
@@ -93,7 +94,7 @@ export function RetainerPage() {
       {/* ===== HERO ===== */}
       <section aria-labelledby="retainer-hero-title" className="mx-auto max-w-3xl text-center">
         <FadeIn>
-          <p className="text-xs font-bold uppercase tracking-[0.2em] text-primary">Retainer Bulanan</p>
+          <p className="text-xs font-bold uppercase tracking-[0.2em] text-primary">Paket Bulanan</p>
           <h1
             id="retainer-hero-title"
             className="mt-3 text-balance text-3xl font-bold tracking-tight text-foreground sm:text-4xl lg:text-5xl"
@@ -118,7 +119,7 @@ export function RetainerPage() {
       </section>
 
       {/* ===== 3 KARTU PLAN ===== */}
-      <section aria-label="Pilihan paket retainer" className="mt-12 sm:mt-16">
+      <section aria-label="Pilihan paket bulanan" className="mt-12 sm:mt-16">
         <div className="grid gap-8 md:grid-cols-3 md:gap-10 lg:gap-12">
           {plans.map((plan, i) => {
             const meta = PLAN_META[plan.slug];
@@ -203,7 +204,7 @@ export function RetainerPage() {
                           <div>
                             <dt className="sr-only">Kanal komunikasi</dt>
                             <dd className="flex items-start gap-2 text-foreground/90">
-                              <MessageCircle className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden />
+                              <WhatsAppIcon className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
                               <span>
                                 <span className="font-semibold">Kanal komunikasi:</span> {meta.kanal}
                               </span>
@@ -371,7 +372,7 @@ export function RetainerPage() {
               <div className="flex flex-col items-center gap-4 sm:flex-row sm:gap-6">
                 <Button
                   asChild
-                  className="h-11 bg-emerald-600 px-5 text-white hover:bg-emerald-700"
+                  className="h-11 bg-[#25D366] px-5 text-white hover:bg-[#1eb757]"
                 >
                   <a
                     href={quickChatUrl()}
@@ -379,7 +380,7 @@ export function RetainerPage() {
                     rel="noopener noreferrer"
                     aria-label="Konsultasi gratis melalui WhatsApp"
                   >
-                    <MessageCircle className="h-4 w-4" aria-hidden />
+                    <WhatsAppIcon className="h-4 w-4" />
                     Konsultasi via WhatsApp
                   </a>
                 </Button>

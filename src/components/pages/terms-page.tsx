@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { MessageCircle } from "lucide-react";
+import { WhatsAppIcon } from "@/components/shared/whatsapp-icon";
 import type { ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -212,7 +212,7 @@ export function TermsPage() {
             </div>
             <Button
               asChild
-              className="h-10 bg-emerald-600 px-5 text-white hover:bg-emerald-700"
+              className="h-10 bg-[#25D366] px-5 text-white hover:bg-[#1eb757]"
             >
               <a
                 href={quickChatUrl()}
@@ -220,7 +220,7 @@ export function TermsPage() {
                 rel="noopener noreferrer"
                 aria-label="Hubungi AlexPicture melalui WhatsApp"
               >
-                <MessageCircle className="h-4 w-4" aria-hidden />
+                <WhatsAppIcon className="h-4 w-4" />
                 Hubungi Kami
               </a>
             </Button>

@@ -1,7 +1,8 @@
 "use client";
 
-import { House, LayoutGrid, MessageCircle, ShoppingCart } from "lucide-react";
+import { House, LayoutGrid, ShoppingCart } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { WhatsAppIcon } from "@/components/shared/whatsapp-icon";
 import { useCartStore, useMounted } from "@/lib/cart-store";
 import { Link } from "@/lib/router";
 import { quickChatUrl } from "@/lib/whatsapp";
@@ -31,9 +32,9 @@ export function BottomNav() {
           href={quickChatUrl()}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex min-h-11 flex-col items-center justify-center gap-1 text-muted-foreground transition-colors hover:text-primary"
+          className="flex min-h-11 flex-col items-center justify-center gap-1 text-muted-foreground transition-colors hover:text-[#25D366]"
         >
-          <MessageCircle className="h-5 w-5" aria-hidden />
+          <WhatsAppIcon className="h-5 w-5" />
           <span className="text-[11px] font-medium">WhatsApp</span>
         </a>
       </div>

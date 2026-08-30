@@ -85,9 +85,9 @@ export const CATEGORIES: Category[] = [
   },
   {
     id: "retainer",
-    name: "Retainer Bulanan",
+    name: "Paket Bulanan",
     short: "Langganan",
-    blurb: "Tim produksi konten bulanan tanpa rekrut in-house.",
+    blurb: "Kuota produksi konten bulanan — tanpa rekrut tim in-house.",
     icon: "Crown",
     image: "/images/cat-langganan.png",
   },
@@ -819,6 +819,32 @@ export const CATALOG: CatalogItem[] = [
 ];
 
 export const PLANS = CATALOG.filter((i) => i.type === "plan");
+
+// ============ KOLEKSI CROSS-CATEGORY (R3 / D-R3-07) ============
+// Kurasi lintas kategori — bukan kategori baru, hanya pintu masok
+// tematik (cth: Ad Creative = iklan Meta + video iklan).
+
+export interface Collection {
+  id: string;
+  name: string;
+  blurb: string;
+  image: string;
+  slugs: string[];
+}
+
+export const COLLECTIONS: Collection[] = [
+  {
+    id: "ad-creative",
+    name: "Ad Creative",
+    blurb: "Materi visual iklan yang dirancang untuk menarik perhatian dan menyampaikan pesan dengan cepat.",
+    image: "/images/mockup-iklan.png",
+    slugs: ["materi-iklan-meta", "video-ugc-20", "video-ugc-30", "video-tv-ad-30", "video-tv-ad-40"],
+  },
+];
+
+export function getCollection(id: string): Collection | undefined {
+  return COLLECTIONS.find((c) => c.id === id);
+}
 
 // Slug produk populer global (fallback rekomendasi For You — PRD §11.4)
 export const POPULAR_SLUGS = [

@@ -14,6 +14,7 @@ import { BottomNav } from "@/components/layout/bottom-nav";
 import { NewsletterStrip } from "@/components/layout/newsletter";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
+import { QuickBriefSheet } from "@/components/shared/quick-brief-sheet";
 import { AboutPage } from "@/components/pages/about-page";
 import { CartPage } from "@/components/pages/cart-page";
 import { CatalogPage } from "@/components/pages/catalog-page";
@@ -40,8 +41,8 @@ const META: Record<string, { title: string; description: string }> = {
     description: "Telusuri 29 layanan kreatif: desain grafis, video, website, add-on, dan paket retainer bulanan dengan harga transparan.",
   },
   "/langganan": {
-    title: "Paket Retainer Bulanan",
-    description: "Produksi konten bulanan tanpa rekrut tim in-house — Starter, Growth, dan Pro dengan kuota desain, video, dan SLA respons jelas.",
+    title: "Paket Bulanan — Produksi Konten Rutin",
+    description: "Paket bulanan (retainer) produksi konten tanpa rekrut tim in-house — Starter, Growth, dan Pro dengan kuota desain, video, dan SLA respons jelas.",
   },
   "/keranjang": {
     title: "Keranjang & Checkout",
@@ -148,6 +149,7 @@ export default function Page() {
       <NewsletterStrip />
       <SiteFooter />
       <BottomNav />
+      <QuickBriefSheet />
     </div>
   );
 }

@@ -1,49 +1,82 @@
 "use client";
 
 // ============================================================
-// HALAMAN BERANDA (#/) — AlexPicture Marketplace (PRD §6.4)
-// Urutan: USP Bar → Hero 60/40 → Kategori → Deals → Pilihan
-// Editor → Interstitial → Untuk Kamu → Baru → CTA akhir.
+// HALAMAN BERANDA (#/) — AlexPicture Marketplace (REVISI R3)
+// Urutan: USP Bar → Hero 60/40 → Layanan Kreatif (5 kartu) →
+// Deals Hari Ini → Pilihan Layanan → 2 Panel Promo → Layanan
+// untuk Kebutuhan Anda → Baru → CTA akhir.
 // ============================================================
 
-import { useMemo } from "react";
 import { motion } from "framer-motion";
 import {
-  ArrowLeftRight, ArrowRight, BadgePercent, Clapperboard, Crown, Globe,
-  MessageCircle, Palette, Puzzle, RefreshCcw, ShieldCheck, ShoppingCart, Zap,
+  ArrowRight,
+  ArrowUpRight,
+  BadgePercent,
+  Clapperboard,
+  Crown,
+  Globe,
+  Megaphone,
+  Palette,
+  RefreshCcw,
+  ShieldCheck,
+  Share2,
+  ShoppingCart,
+  Sparkles,
+  Zap,
 } from "lucide-react";
 import { toast } from "sonner";
 import { Countdown } from "@/components/shared/countdown";
 import { Img } from "@/components/shared/img";
 import { ProductCard } from "@/components/shared/product-card";
 import { SectionHeading } from "@/components/shared/section-heading";
+import { WhatsAppIcon } from "@/components/shared/whatsapp-icon";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
-  BUNDLE_DEALS, CATALOG, CATEGORIES, NEW_SLUGS, POPULAR_SLUGS,
-  computeBundle, formatIDR, getByCategory, getCategory, getItem,
-  type BundleDeal, type CatalogItem, type CategoryId,
+  BUNDLE_DEALS,
+  COLLECTIONS,
+  NEW_SLUGS,
+  PLANS,
+  POPULAR_SLUGS,
+  computeBundle,
+  formatIDR,
+  getByCategory,
+  getItem,
+  type BundleDeal,
+  type CatalogItem,
 } from "@/lib/catalog";
-import { getViewScores, useCartStore, useMounted, useWishlistStore, type CartItem } from "@/lib/cart-store";
+import { useCartStore } from "@/lib/cart-store";
+import { useBriefStore as useBrief } from "@/lib/brief-store";
 import { Link, navigate } from "@/lib/router";
 import { quickChatUrl } from "@/lib/whatsapp";
 import { cn } from "@/lib/utils";
 
 // ---------- Konstanta & data turunan (murni, tanpa hook) ----------
 
-const CATEGORY_ICONS: Record<CategoryId, React.ComponentType<{ className?: string }>> = {
-  desain: Palette, video: Clapperboard, website: Globe, addon: Puzzle, retainer: Crown,
+const CATEGORY_ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
+  desain: Palette,
+  video: Clapperboard,
+  website: Globe,
+  addon: Megaphone,
+  retainer: Crown,
 };
-const CATEGORY_IDS: string[] = CATEGORIES.map((c) => c.id);
 
 const POPULAR_ITEMS: CatalogItem[] = POPULAR_SLUGS.map(getItem).filter((i): i is CatalogItem => i !== undefined);
 const NEW_ITEMS: CatalogItem[] = NEW_SLUGS.map(getItem).filter((i): i is CatalogItem => i !== undefined);
 
 const USP_ITEMS = [
-  { icon: BadgePercent, title: "Harga Transparan", desc: "Harga tampil jelas sejak awal" },
+  { icon: BadgePercent, title: "Harga Mulai 10 Riban", desc: "Harga tampil jelas sejak awal" },
   { icon: RefreshCcw, title: "Revisi Terstruktur", desc: "Kuota revisi jelas tiap layanan" },
   { icon: Zap, title: "Respons Cepat", desc: "Chat dibalas di jam kerja" },
   { icon: ShieldCheck, title: "Garansi Deliverable", desc: "Hasil sesuai daftar, atau diperbaiki" },
+] as const;
+
+/** Chip hero — klik menuju katalog terfilter (R3 poin 5). */
+const HERO_CHIPS = [
+  { label: "Desain Grafis", to: "/katalog?kategori=desain" },
+  { label: "Website", to: "/katalog?kategori=website" },
+  { label: "Video Komersial", to: "/katalog?kategori=video" },
+  { label: "Ad Creative", to: "/katalog?koleksi=ad-creative" },
 ] as const;
 
 /** Preset animasi masuk saat scroll — subtil (≤300ms). */
@@ -52,12 +85,6 @@ const FADE_UP = {
   whileInView: { opacity: 1, y: 0 },
   viewport: { once: true, margin: "-40px" },
 };
-
-/** Peringkat popularitas (0 = terpopuler) untuk pengurutan rekomendasi. */
-function popularRank(slug: string): number {
-  const idx = POPULAR_SLUGS.indexOf(slug);
-  return idx === -1 ? Number.MAX_SAFE_INTEGER : idx;
-}
 
 /** Wadah seksi standar beranda. */
 function Section({ label, className, children }: {
@@ -137,31 +164,36 @@ function HeroSection() {
         {/* Kolom teks (60%) */}
         <div className="min-w-0">
           <p className="inline-flex items-center rounded-full border border-amber-500/30 bg-amber-500/10 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.18em] text-amber-400">
-            Marketplace Jasa Kreatif
+            Jasa Layanan Digital Kreatif
           </p>
           <h1 className="mt-4 text-balance text-3xl font-extrabold leading-[1.12] tracking-tight text-stone-50 sm:text-4xl lg:text-5xl">
-            Semua Kebutuhan Kreatif Bisnismu, dalam Satu Marketplace.
+            Creative Services for Growing Businesses.
           </h1>
           <p className="mt-4 max-w-xl text-sm leading-relaxed text-stone-300 sm:text-base">
-            Harga transparan tanpa negosiasi tersembunyi, deliverable tertulis jelas sejak awal,
-            dan checkout langsung via WhatsApp — dari desain feed sampai website full-stack.
+            Layanan desain grafis, pembuatan website, dan video komersial untuk membantu bisnis
+            tampil lebih profesional dengan materi pemasaran yang siap digunakan.
           </p>
           <div className="mt-6 flex flex-col gap-3 sm:flex-row">
             <Button asChild size="lg" className="h-12 px-6 text-base font-bold">
-              <Link to="/katalog" ariaLabel="Jelajahi seluruh katalog layanan">
-                Jelajahi Katalog <ArrowRight className="h-4 w-4" aria-hidden />
+              <Link to="/katalog" ariaLabel="Lihat seluruh layanan kami">
+                Lihat Layanan <ArrowRight className="h-4 w-4" aria-hidden />
               </Link>
             </Button>
             <Button asChild size="lg" variant="outline" className="h-12 border-stone-600 bg-transparent px-6 text-base font-semibold text-stone-100 hover:bg-stone-800 hover:text-white dark:border-stone-600 dark:bg-transparent dark:text-stone-100 dark:hover:bg-stone-800">
-              <Link to="/langganan" ariaLabel="Lihat paket retainer bulanan">
-                Lihat Paket Retainer
+              <Link to="/portofolio" ariaLabel="Lihat galeri portofolio AlexPicture">
+                Lihat Portofolio
               </Link>
             </Button>
           </div>
-          <ul className="mt-6 flex flex-wrap gap-2" aria-label="Fakta singkat AlexPicture">
-            {[`${CATALOG.length} layanan`, `${CATEGORIES.length} kategori`, "Garansi revisi", "Respons cepat"].map((chip) => (
-              <li key={chip} className="rounded-full border border-stone-700 bg-stone-800/70 px-3 py-1 text-[11px] font-medium text-stone-300">
-                {chip}
+          <ul className="mt-6 flex flex-wrap gap-2" aria-label="Pintasan layanan">
+            {HERO_CHIPS.map((chip) => (
+              <li key={chip.label}>
+                <Link
+                  to={chip.to}
+                  className="inline-flex rounded-full border border-stone-700 bg-stone-800/70 px-3 py-1 text-[11px] font-medium text-stone-300 transition-colors hover:border-amber-500/50 hover:text-amber-400"
+                >
+                  {chip.label}
+                </Link>
               </li>
             ))}
           </ul>
@@ -183,32 +215,94 @@ function HeroSection() {
   );
 }
 
-// ---------- 3. BELANJA PER KATEGORI — scroll horizontal mobile ----------
+// ---------- 3. LAYANAN KREATIF — 5 kartu (4 kategori + Ad Creative) ----------
+
+interface CategoryCard {
+  key: string;
+  title: string;
+  desc: string;
+  image: string;
+  to: string;
+  cta: string;
+  countLabel: string;
+}
+
+const AD_CREATIVE = COLLECTIONS[0];
+
+const CATEGORY_CARDS: CategoryCard[] = [
+  {
+    key: "desain",
+    title: "Desain & Branding",
+    desc: "Logo, identitas visual, materi media sosial, dan berbagai kebutuhan desain bisnis.",
+    image: "/images/cat-desain.png",
+    to: "/katalog?kategori=desain",
+    cta: "Lihat Layanan",
+    countLabel: `${getByCategory("desain").length} layanan`,
+  },
+  {
+    key: "video",
+    title: "Video Komersial",
+    desc: "Video promosi untuk produk, layanan, iklan, dan kebutuhan konten bisnis.",
+    image: "/images/cat-video.png",
+    to: "/katalog?kategori=video",
+    cta: "Lihat Layanan",
+    countLabel: `${getByCategory("video").length} layanan`,
+  },
+  {
+    key: "website",
+    title: "Website & Web Apps",
+    desc: "Website profesional, landing page, dan aplikasi web untuk kebutuhan bisnis.",
+    image: "/images/cat-web.png",
+    to: "/katalog?kategori=website",
+    cta: "Lihat Layanan",
+    countLabel: `${getByCategory("website").length} layanan`,
+  },
+  {
+    key: "ad-creative",
+    title: "Ad Creative",
+    desc: "Materi visual iklan yang dirancang untuk menarik perhatian dan menyampaikan pesan dengan cepat.",
+    image: "/images/mockup-iklan.png",
+    to: "/katalog?koleksi=ad-creative",
+    cta: "Lihat Layanan",
+    countLabel: `${AD_CREATIVE?.slugs.length ?? 0} layanan`,
+  },
+  {
+    key: "retainer",
+    title: "Paket Bulanan",
+    desc: "Kuota desain, video, dan materi iklan setiap bulan — dalam satu paket langganan.",
+    image: "/images/cat-langganan.png",
+    to: "/langganan",
+    cta: "Lihat Paket",
+    countLabel: `${PLANS.length} paket`,
+  },
+];
 
 function CategorySection() {
   return (
-    <Section label="Belanja per kategori" className="py-10 sm:py-12">
+    <Section label="Layanan Kreatif" className="py-10 sm:py-12">
       <SectionHeading
-        title="Belanja per Kategori"
-        subtitle="Lima lini produksi untuk seluruh kebutuhan digital bisnismu"
+        title="Layanan Kreatif"
+        subtitle="Pilih layanan untuk mengembangkan tampilan dan pemasaran bisnis Anda."
         href="/katalog"
+        actionLabel="Lihat Semua"
       />
-      <div className="no-scrollbar flex gap-3 overflow-x-auto pb-2 md:grid md:grid-cols-5 md:gap-4 md:overflow-visible md:pb-0">
-        {CATEGORIES.map((cat, i) => {
-          const Icon = CATEGORY_ICONS[cat.id];
-          const count = getByCategory(cat.id).length;
+      <div className="no-scrollbar flex gap-3 overflow-x-auto pb-2 md:grid md:grid-cols-3 md:gap-4 md:overflow-visible md:pb-0 lg:grid-cols-5">
+        {CATEGORY_CARDS.map((card, i) => {
+          const Icon = CATEGORY_ICONS[card.key] ?? Sparkles;
           return (
             <motion.div
-              key={cat.id} {...FADE_UP}
+              key={card.key} {...FADE_UP}
               transition={{ duration: 0.26, ease: "easeOut", delay: i * 0.05 }}
-              className="min-w-[160px] flex-1 md:min-w-0"
+              className="min-w-[180px] flex-1 md:min-w-0"
             >
-              <Link to={`/katalog?kategori=${cat.id}`} ariaLabel={`Lihat ${count} layanan kategori ${cat.name}`} className="group block h-full">
+              <Link to={card.to} ariaLabel={`${card.cta} — ${card.title}`} className="group flex h-full flex-col">
                 <div className="flex h-full flex-col overflow-hidden rounded-xl border bg-card shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg">
                   <div className="relative">
                     <Img
-                      src={cat.image} alt={`Kategori ${cat.name}`} ratio="4/3"
-                      sizes="(max-width: 768px) 45vw, 20vw"
+                      src={card.image}
+                      alt={card.title}
+                      ratio="4/3"
+                      sizes="(max-width: 768px) 50vw, (max-width: 1024px) 30vw, 20vw"
                       imgClassName="transition-transform duration-300 group-hover:scale-[1.04]"
                     />
                     <span className="absolute bottom-2 left-2 grid h-9 w-9 place-items-center rounded-lg bg-stone-900/80 text-amber-400 shadow-md backdrop-blur-sm">
@@ -216,9 +310,17 @@ function CategorySection() {
                     </span>
                   </div>
                   <div className="flex flex-1 flex-col p-3">
-                    <h3 className="text-sm font-bold text-foreground group-hover:text-primary">{cat.name}</h3>
-                    <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-muted-foreground">{cat.blurb}</p>
-                    <p className="mt-2 text-[11px] font-semibold uppercase tracking-wide text-primary">{count} layanan</p>
+                    <h3 className="text-sm font-bold text-foreground group-hover:text-primary">{card.title}</h3>
+                    <p className="mt-1 line-clamp-3 flex-1 text-xs leading-relaxed text-muted-foreground">{card.desc}</p>
+                    <div className="mt-3 flex items-center justify-between gap-2">
+                      <span className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+                        {card.countLabel}
+                      </span>
+                      <span className="inline-flex items-center gap-1 text-xs font-bold text-primary">
+                        {card.cta}
+                        <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" aria-hidden />
+                      </span>
+                    </div>
                   </div>
                 </div>
               </Link>
@@ -298,7 +400,7 @@ function DealsSection() {
       <div className="mb-4 flex flex-wrap items-end justify-between gap-x-4 gap-y-3 sm:mb-6">
         <SectionHeading
           title="Deals Hari Ini"
-          subtitle="Paket bundling pilihan — lengkapi kebutuhanmu dalam satu kali order"
+          subtitle="Paket bundling pilihan — lengkapi kebutuhan Anda dalam satu kali order"
           className="mb-0 sm:mb-0"
         />
         <div className="flex items-center gap-2 sm:gap-3">
@@ -322,12 +424,17 @@ function DealsSection() {
   );
 }
 
-// ---------- 5. PILIHAN EDITOR — 8 layanan unggulan ----------
+// ---------- 5. PILIHAN LAYANAN — 8 layanan terlaris + tombol WA ----------
 
 function FeaturedSection() {
   return (
-    <Section label="Pilihan editor" className="py-10 sm:py-12">
-      <SectionHeading title="Pilihan Editor" subtitle="Layanan terlaris & nilai terbaik" href="/katalog" />
+    <Section label="Pilihan layanan" className="py-10 sm:py-12">
+      <SectionHeading
+        title="Pilihan Layanan"
+        subtitle="Layanan terlaris & nilai terbaik — dapat disesuaikan dengan kebutuhan bisnis Anda."
+        href="/katalog"
+        actionLabel="Lihat Semua"
+      />
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">
         {POPULAR_ITEMS.map((item, i) => (
           <motion.div key={item.slug} {...FADE_UP} transition={{ duration: 0.26, ease: "easeOut", delay: (i % 4) * 0.05 }}>
@@ -339,53 +446,55 @@ function FeaturedSection() {
   );
 }
 
-// ---------- 6. PROMO INTERSTITIAL — 2 kartu besar (ungu & teal) ----------
+// ---------- 6. DUA PANEL PROMO (R3 poin 11) ----------
 
 function PromoSection() {
+  const showBrief = useBrief((s) => s.show);
+
   return (
     <Section label="Penawaran lainnya" className="py-10 sm:py-12">
       <div className="grid gap-4 md:grid-cols-2">
-        {/* Kartu A — retainer */}
+        {/* Panel kiri — paket bulanan */}
         <motion.div {...FADE_UP} transition={{ duration: 0.28, ease: "easeOut" }}>
-          <div className="flex h-full flex-col rounded-2xl border border-purple-200/60 bg-purple-50 p-5 dark:border-purple-900/50 dark:bg-purple-950/40 sm:p-6">
-            <span className="grid h-11 w-11 place-items-center rounded-xl bg-purple-600/10 text-purple-700 dark:text-purple-300">
-              <Crown className="h-5 w-5" aria-hidden />
+          <div className="flex h-full flex-col rounded-2xl border border-amber-200/70 bg-amber-50 p-5 dark:border-amber-900/50 dark:bg-amber-950/30 sm:p-6">
+            <span className="grid h-11 w-11 place-items-center rounded-xl bg-amber-500/15 text-amber-700 dark:text-amber-300">
+              <Sparkles className="h-5 w-5" aria-hidden />
             </span>
-            <h3 className="mt-4 text-lg font-bold text-purple-950 dark:text-purple-100 sm:text-xl">
-              Produksi Konten Setiap Bulan
+            <h3 className="mt-4 text-lg font-bold text-amber-950 dark:text-amber-100 sm:text-xl">
+              Butuh Konten untuk Sebulan?
             </h3>
-            <p className="mt-2 text-sm leading-relaxed text-purple-900/80 dark:text-purple-200/80">
-              Kuota desain, video, dan copywriting terisi rutin lewat paket retainer — tanpa rekrut
-              tim in-house, tanpa drama manajemen proyek.
+            <p className="mt-2 text-sm leading-relaxed text-amber-900/80 dark:text-amber-200/80">
+              Buat kebutuhan desain konten bisnis Anda lebih terencana dengan paket produksi bulanan.
             </p>
             <div className="mt-auto pt-5">
-              <Button asChild variant="outline" className="h-11 border-purple-300 bg-white/80 font-semibold text-purple-900 hover:bg-white hover:text-purple-800 dark:border-purple-800 dark:bg-purple-950/60 dark:text-purple-100 dark:hover:bg-purple-900/60">
-                <Link to="/langganan" ariaLabel="Lihat paket retainer bulanan">
-                  Lihat Paket Retainer <ArrowRight className="h-4 w-4" aria-hidden />
+              <Button asChild variant="outline" className="h-11 border-amber-300 bg-white/80 font-semibold text-amber-900 hover:bg-white hover:text-amber-800 dark:border-amber-800 dark:bg-amber-950/60 dark:text-amber-100 dark:hover:bg-amber-900/60">
+                <Link to="/langganan" ariaLabel="Lihat paket bulanan">
+                  Lihat Paket Bulanan <ArrowRight className="h-4 w-4" aria-hidden />
                 </Link>
               </Button>
             </div>
           </div>
         </motion.div>
 
-        {/* Kartu B — migrasi */}
+        {/* Panel kanan — konsultasi website */}
         <motion.div {...FADE_UP} transition={{ duration: 0.28, ease: "easeOut", delay: 0.08 }}>
-          <div className="flex h-full flex-col rounded-2xl border border-teal-200/60 bg-teal-50 p-5 dark:border-teal-900/50 dark:bg-teal-950/40 sm:p-6">
-            <span className="grid h-11 w-11 place-items-center rounded-xl bg-teal-600/10 text-teal-700 dark:text-teal-300">
-              <ArrowLeftRight className="h-5 w-5" aria-hidden />
+          <div className="flex h-full flex-col rounded-2xl border border-emerald-200/70 bg-emerald-50 p-5 dark:border-emerald-900/50 dark:bg-emerald-950/30 sm:p-6">
+            <span className="grid h-11 w-11 place-items-center rounded-xl bg-emerald-600/10 text-emerald-700 dark:text-emerald-300">
+              <ArrowUpRight className="h-5 w-5" aria-hidden />
             </span>
-            <h3 className="mt-4 text-lg font-bold text-teal-950 dark:text-teal-100 sm:text-xl">
-              Punya Website Lama?
+            <h3 className="mt-4 text-lg font-bold text-emerald-950 dark:text-emerald-100 sm:text-xl">
+              Punya Website yang Ingin Dibuat?
             </h3>
-            <p className="mt-2 text-sm leading-relaxed text-teal-900/80 dark:text-teal-200/80">
-              Pindahkan seluruh konten dan struktur situs lama ke platform baru — dikerjakan penuh
-              oleh tim kami, data Anda tetap aman.
+            <p className="mt-2 text-sm leading-relaxed text-emerald-900/80 dark:text-emerald-200/80">
+              Ceritakan kebutuhan Anda. Kami bantu mengubah ide, informasi, dan kebutuhan bisnis
+              menjadi website yang siap digunakan.
             </p>
             <div className="mt-auto pt-5">
-              <Button asChild variant="outline" className="h-11 border-teal-300 bg-white/80 font-semibold text-teal-900 hover:bg-white hover:text-teal-800 dark:border-teal-800 dark:bg-teal-950/60 dark:text-teal-100 dark:hover:bg-teal-900/60">
-                <Link to="/produk/addon-migrasi-konten" ariaLabel="Lihat layanan migrasi konten">
-                  Lihat Layanan Migrasi <ArrowRight className="h-4 w-4" aria-hidden />
-                </Link>
+              <Button
+                className="h-11 bg-emerald-600 font-semibold text-white hover:bg-emerald-700"
+                onClick={() => showBrief({ intent: "website" })}
+              >
+                Mulai Konsultasi <ArrowRight className="h-4 w-4" aria-hidden />
               </Button>
             </div>
           </div>
@@ -395,113 +504,66 @@ function PromoSection() {
   );
 }
 
-// ---------- 7. UNTUK KAMU — rekomendasi rule-based (PRD §11.4) ----------
-// Skor kategori: wishlist ×3 + keranjang ×3 + view kategori ×1.
+// ---------- 7. LAYANAN UNTUK KEBUTUHAN ANDA — 4 kartu kebutuhan (R3 poin 12) ----------
 
-interface ForYouInput {
-  wishlistSlugs: string[];
-  cartItems: CartItem[];
-  viewScores: Record<string, number>;
-}
+const NEED_CARDS = [
+  {
+    icon: Palette,
+    title: "Ingin memperbaiki tampilan brand?",
+    desc: "Mulai dari logo, identitas visual, hingga materi promosi.",
+    intent: "brand" as const,
+  },
+  {
+    icon: Share2,
+    title: "Ingin lebih aktif di media sosial?",
+    desc: "Siapkan desain konten yang konsisten dan mudah digunakan.",
+    intent: "social" as const,
+  },
+  {
+    icon: Globe,
+    title: "Ingin punya website?",
+    desc: "Bangun website yang menjelaskan bisnis Anda dengan jelas.",
+    intent: "website" as const,
+  },
+  {
+    icon: Megaphone,
+    title: "Ingin mempromosikan produk?",
+    desc: "Gunakan video dan materi iklan yang lebih menarik.",
+    intent: "promo" as const,
+  },
+];
 
-interface ForYouResult {
-  items: CatalogItem[];
-  subtitle: string;
-}
-
-function computeForYou({ wishlistSlugs, cartItems, viewScores }: ForYouInput): ForYouResult {
-  const cartWish: Record<string, number> = {};
-  const views: Record<string, number> = {};
-  const bump = (store: Record<string, number>, cat: string, n: number) => {
-    store[cat] = (store[cat] ?? 0) + n;
-  };
-
-  for (const s of wishlistSlugs) {
-    const it = getItem(s);
-    if (it) bump(cartWish, it.category, 3);
-  }
-  for (const c of cartItems) {
-    const it = getItem(c.slug);
-    if (it) bump(cartWish, it.category, 3);
-  }
-  for (const [cat, n] of Object.entries(viewScores)) {
-    if (typeof n === "number" && n > 0 && CATEGORY_IDS.includes(cat)) bump(views, cat, n);
-  }
-
-  const cats = new Set([...Object.keys(cartWish), ...Object.keys(views)]);
-  if (cats.size === 0) {
-    return { items: POPULAR_ITEMS.slice(0, 4), subtitle: "Layanan populer untuk memulai" };
-  }
-
-  // Kategori dominan berdasarkan total skor gabungan
-  let topCat: CategoryId = "desain";
-  let topScore = -1;
-  for (const cat of cats) {
-    const score = (cartWish[cat] ?? 0) + (views[cat] ?? 0);
-    if (score > topScore) {
-      topScore = score;
-      topCat = cat as CategoryId;
-    }
-  }
-
-  const cartSlugs = new Set(cartItems.map((i) => i.slug));
-  const pool = getByCategory(topCat)
-    .filter((i) => !cartSlugs.has(i.slug))
-    .sort((a, b) => popularRank(a.slug) - popularRank(b.slug));
-  const picked = pool.slice(0, 4);
-  const pickedSlugs = new Set(picked.map((p) => p.slug));
-
-  // Tambalan dari kategori lain (populer dulu) bila kurang dari 4
-  for (const slug of POPULAR_SLUGS) {
-    if (picked.length >= 4) break;
-    if (cartSlugs.has(slug) || pickedSlugs.has(slug)) continue;
-    const it = getItem(slug);
-    if (it) {
-      picked.push(it);
-      pickedSlugs.add(slug);
-    }
-  }
-  // Pengaman terakhir: pastikan selalu ada 4 rekomendasi
-  for (const it of POPULAR_ITEMS) {
-    if (picked.length >= 4) break;
-    if (pickedSlugs.has(it.slug)) continue;
-    picked.push(it);
-    pickedSlugs.add(it.slug);
-  }
-
-  const catInfo = getCategory(topCat);
-  const subtitle =
-    (cartWish[topCat] ?? 0) > 0
-      ? "Berdasarkan keranjang & wishlist-mu"
-      : `Karena kamu sering melihat layanan ${catInfo?.short ?? catInfo?.name ?? "kami"}`;
-
-  return { items: picked.slice(0, 4), subtitle };
-}
-
-function ForYouSection() {
-  const mounted = useMounted();
-  const wishlistSlugs = useWishlistStore((s) => s.slugs);
-  const cartItems = useCartStore((s) => s.items);
-
-  // Personalisasi murni derivasi render (useMemo) — tanpa setState di
-  // effect; sebelum mount memakai default agar bebas hydration mismatch.
-  const reco = useMemo(
-    () =>
-      computeForYou({
-        wishlistSlugs: mounted ? wishlistSlugs : [],
-        cartItems: mounted ? cartItems : [],
-        viewScores: mounted ? getViewScores() : {},
-      }),
-    [mounted, wishlistSlugs, cartItems]
-  );
+function NeedSection() {
+  const showBrief = useBrief((s) => s.show);
 
   return (
-    <Section label="Rekomendasi untuk kamu" className="py-10 sm:py-12">
-      <SectionHeading title="Untuk Kamu" subtitle={reco.subtitle} icon />
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">
-        {reco.items.map((item, i) => (
-          <motion.div key={item.slug} {...FADE_UP} transition={{ duration: 0.26, ease: "easeOut", delay: (i % 4) * 0.05 }}>
-            <ProductCard item={item} variant="full" />
+    <Section label="Layanan untuk kebutuhan Anda" className="py-10 sm:py-12">
+      <SectionHeading
+        title="Layanan untuk Kebutuhan Anda"
+        subtitle="Tidak yakin harus mulai dari mana? Pilih berdasarkan kebutuhan bisnis Anda."
+      />
+      <div className="grid gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-4">
+        {NEED_CARDS.map((card, i) => (
+          <motion.div
+            key={card.title}
+            {...FADE_UP}
+            transition={{ duration: 0.26, ease: "easeOut", delay: (i % 4) * 0.05 }}
+            className="h-full"
+          >
+            <div className="flex h-full flex-col rounded-xl border bg-card p-5 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg">
+              <span className="grid h-10 w-10 place-items-center rounded-xl bg-primary/10 text-primary">
+                <card.icon className="h-5 w-5" aria-hidden />
+              </span>
+              <h3 className="mt-4 text-base font-bold leading-snug text-foreground">{card.title}</h3>
+              <p className="mt-2 flex-1 text-sm leading-relaxed text-muted-foreground">{card.desc}</p>
+              <Button
+                variant="outline"
+                className="mt-4 h-10 w-full font-semibold"
+                onClick={() => showBrief({ intent: card.intent })}
+              >
+                Konsultasikan
+              </Button>
+            </div>
           </motion.div>
         ))}
       </div>
@@ -518,6 +580,7 @@ function NewArrivalsSection() {
         title="Baru di AlexPicture"
         subtitle="Layanan yang baru saja bergabung di katalog"
         href="/katalog"
+        actionLabel="Lihat Semua"
       />
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">
         {NEW_ITEMS.map((item, i) => (
@@ -530,26 +593,26 @@ function NewArrivalsSection() {
   );
 }
 
-// ---------- 9. CTA STRIP AKHIR — konsultasi gratis via WhatsApp ----------
+// ---------- 9. CTA BESAR SEBELUM FOOTER (R3 poin 11b) ----------
 
 function FinalCtaSection() {
   return (
     <section aria-label="Konsultasi gratis" className="mt-10 w-full bg-stone-900 sm:mt-12">
       <div className="mx-auto flex max-w-7xl flex-col items-center px-4 py-12 text-center sm:py-16 lg:px-8">
-        <span className="grid h-12 w-12 place-items-center rounded-2xl bg-emerald-600/15 text-emerald-400">
-          <MessageCircle className="h-6 w-6" aria-hidden />
+        <span className="grid h-12 w-12 place-items-center rounded-2xl bg-[#25D366]/15 text-[#25D366]">
+          <WhatsAppIcon className="h-6 w-6" />
         </span>
         <h2 className="mt-4 text-balance text-2xl font-extrabold tracking-tight text-stone-50 sm:text-3xl">
-          Siap mulai? Konsultasi brief pertama gratis.
+          Punya Ide? Mari Kita Wujudkan.
         </h2>
         <p className="mt-3 max-w-xl text-sm leading-relaxed text-stone-300 sm:text-base">
-          Ceritakan kebutuhan bisnismu — tim kami bantu memilih layanan yang paling pas, tanpa
-          biaya dan tanpa komitmen.
+          Ceritakan kebutuhan bisnis Anda. Kami bantu menentukan layanan yang paling sesuai — mulai
+          dari desain, website, hingga video komersial.
         </p>
         <div className="mt-6 flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
-          <Button asChild size="lg" className="h-12 bg-emerald-600 px-6 text-base font-bold text-white hover:bg-emerald-700">
+          <Button asChild size="lg" className="h-12 bg-[#25D366] px-6 text-base font-bold text-white hover:bg-[#1eb757]">
             <a href={quickChatUrl()} target="_blank" rel="noopener noreferrer">
-              <MessageCircle className="h-4 w-4" aria-hidden /> Chat WhatsApp Sekarang
+              <WhatsAppIcon className="h-4 w-4" /> Chat WhatsApp Sekarang
             </a>
           </Button>
           <Button asChild size="lg" variant="outline" className="h-12 border-stone-600 bg-transparent px-6 text-base font-semibold text-stone-100 hover:bg-stone-800 hover:text-white dark:border-stone-600 dark:bg-transparent dark:text-stone-100 dark:hover:bg-stone-800">
@@ -558,6 +621,7 @@ function FinalCtaSection() {
             </Link>
           </Button>
         </div>
+        <p className="mt-5 text-xs text-stone-400">Konsultasi awal tanpa biaya.</p>
       </div>
     </section>
   );
@@ -574,7 +638,7 @@ export function HomePage() {
       <DealsSection />
       <FeaturedSection />
       <PromoSection />
-      <ForYouSection />
+      <NeedSection />
       <NewArrivalsSection />
       <FinalCtaSection />
     </div>

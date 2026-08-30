@@ -23,7 +23,7 @@ export const SITE = {
 
 export const NAV_LINKS = [
   { to: "/katalog", label: "Katalog" },
-  { to: "/langganan", label: "Paket Retainer" },
+  { to: "/langganan", label: "Paket Bulanan" },
   { to: "/portofolio", label: "Portofolio" },
   { to: "/lacak-pesanan", label: "Lacak Pesanan" },
   { to: "/faq", label: "FAQ" },

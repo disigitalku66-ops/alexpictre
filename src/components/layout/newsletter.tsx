@@ -22,26 +22,27 @@ export function NewsletterStrip() {
       return;
     }
     setDone(true);
-    toast.success("Berhasil berlangganan newsletter", {
-      description: "Janji kami: maksimal 1 email per bulan, tanpa spam.",
+    toast.success("Berhasil berlangganan", {
+      description: "Janji kami: hanya tips & insight terbaik, tanpa spam.",
     });
   }
 
   return (
-    <section aria-label="Newsletter" className="border-t bg-accent/60 dark:bg-accent/30">
+    <section aria-label="Newsletter & tips kreatif" className="border-t bg-accent/60 dark:bg-accent/30">
       <div className="mx-auto flex max-w-7xl flex-col items-center gap-4 px-4 py-8 sm:flex-row sm:justify-between lg:px-8">
         <div className="max-w-xl">
           <h2 className="flex items-center gap-2 text-lg font-bold text-foreground sm:text-xl">
             <MailCheck className="h-5 w-5 text-primary" aria-hidden />
-            Tips kreatif & promo spesial
+            Tips Kreatif &amp; Inspirasi Bisnis
           </h2>
           <p className="mt-1 text-sm text-muted-foreground">
-            Berlangganan gratis — maksimal 1 email per bulan berisi ide konten, tren desain, dan promo terbatas.
+            Ide, tips, dan insight seputar desain, website, video, dan pemasaran digital untuk
+            membantu bisnis Anda tampil lebih baik.
           </p>
         </div>
         {done ? (
           <p className="rounded-full bg-primary/10 px-4 py-2 text-sm font-semibold text-primary">
-            Terima kasih! Email kamu sudah terdaftar.
+            Terima kasih! Email Anda sudah terdaftar.
           </p>
         ) : (
           <form onSubmit={subscribe} className="flex w-full max-w-md gap-2" role="subscribe">

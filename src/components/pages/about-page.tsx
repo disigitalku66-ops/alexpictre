@@ -10,13 +10,13 @@ import {
   FileText,
   Mail,
   MapPin,
-  MessageCircle,
   PackageCheck,
   RefreshCw,
   Zap,
 } from "lucide-react";
 import type { ComponentType, ReactNode } from "react";
 import { Img } from "@/components/shared/img";
+import { WhatsAppIcon } from "@/components/shared/whatsapp-icon";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Link } from "@/lib/router";
@@ -79,7 +79,7 @@ const CONTACTS: {
   { icon: MapPin, label: "Alamat Studio", value: SITE.address },
   { icon: Clock, label: "Jam Operasional", value: SITE.hours },
   {
-    icon: MessageCircle,
+    icon: WhatsAppIcon,
     label: "WhatsApp",
     value: SITE.phoneDisplay,
     href: quickChatUrl(),
@@ -308,7 +308,7 @@ export function AboutPage() {
                     rel="noopener noreferrer"
                     aria-label="Hubungi AlexPicture melalui WhatsApp"
                   >
-                    <MessageCircle className="h-4 w-4" aria-hidden />
+                    <WhatsAppIcon className="h-4 w-4" />
                     Chat WhatsApp
                   </a>
                 </Button>

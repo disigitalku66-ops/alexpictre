@@ -14,10 +14,10 @@ import {
   CheckCircle2,
   Copy,
   Landmark,
-  MessageCircle,
   PackageSearch,
 } from "lucide-react";
 
+import { WhatsAppIcon } from "@/components/shared/whatsapp-icon";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
@@ -317,10 +317,10 @@ export function ThankYouPage() {
             <div>
               <Button
                 type="button"
-                className="h-12 w-full bg-emerald-600 text-base font-semibold text-white hover:bg-emerald-700"
+                className="h-12 w-full bg-[#25D366] text-base font-semibold text-white hover:bg-[#1eb757]"
                 onClick={openLastWa}
               >
-                <MessageCircle className="h-5 w-5" aria-hidden />
+                <WhatsAppIcon className="h-5 w-5" />
                 Buka WhatsApp
               </Button>
               <p className="mt-2 text-center text-xs text-muted-foreground">
@@ -328,9 +328,9 @@ export function ThankYouPage() {
               </p>
             </div>
           ) : (
-            <Button asChild className="h-12 w-full bg-emerald-600 text-base font-semibold text-white hover:bg-emerald-700">
+            <Button asChild className="h-12 w-full bg-[#25D366] text-base font-semibold text-white hover:bg-[#1eb757]">
               <a href={quickChatUrl()} target="_blank" rel="noopener noreferrer">
-                <MessageCircle className="h-5 w-5" aria-hidden />
+                <WhatsAppIcon className="h-5 w-5" />
                 Chat WhatsApp
               </a>
             </Button>
