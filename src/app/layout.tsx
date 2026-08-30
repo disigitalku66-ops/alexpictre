@@ -13,6 +13,7 @@ const jakarta = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://alexpictre.vercel.app"),
   title: {
     default: "AlexPicture Marketplace — Jasa Desain, Video & Website Profesional",
     template: "%s | AlexPicture Marketplace",
