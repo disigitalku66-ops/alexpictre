@@ -1,0 +1,26 @@
+// AlexPicture Marketplace — Skema Database (PRD v3.0 §12.2)
+// Hanya tabel Lead: lead logging anti-kehilangan + fondasi Lacak Pesanan (Bab 10).
+// Tidak ada tabel user, tidak ada data pembayaran sensitif.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Lead {
+  id            String   @id @default(cuid())
+  code          String   @unique // Order ID: APM-YYMMDD-XXXX
+  customerName  String
+  brandName     String
+  notes         String?
+  items         String // JSON: [{slug, name, qty, unitPrice, subtotal}]
+  total         Int // Total final (server-computed)
+  status        String   @default("NEW") // NEW | CONTACTED | DEAL | IN_PRODUCTION | DELIVERED | DONE | LOST
+  paymentStatus String   @default("UNPAID") // UNPAID | DP | PAID
+  source        String?
+  createdAt     DateTime @default(now())
+}
