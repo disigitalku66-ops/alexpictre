@@ -15,8 +15,8 @@ const jakarta = Plus_Jakarta_Sans({
 export const metadata: Metadata = {
   metadataBase: new URL("https://alexpictre.vercel.app"),
   title: {
-    default: "AlexPicture Marketplace — Jasa Desain, Video & Website Profesional",
-    template: "%s | AlexPicture Marketplace",
+    default: "AlexPicture — Desain, Website & Video untuk Bisnis",
+    template: "%s | AlexPicture",
   },
   description: SITE.description,
   keywords: [
@@ -32,16 +32,16 @@ export const metadata: Metadata = {
   authors: [{ name: SITE.name }],
   manifest: "/manifest.json",
   openGraph: {
-    title: "AlexPicture Marketplace — Jasa Kreatif Profesional",
+    title: "AlexPicture — Desain, Website & Video untuk Bisnis",
     description: SITE.description,
     siteName: SITE.fullName,
     type: "website",
     locale: "id_ID",
-    images: [{ url: "/images/hero-collage.png", width: 1344, height: 768, alt: "AlexPicture Marketplace" }],
+    images: [{ url: "/images/hero-collage.png", width: 1344, height: 768, alt: "Contoh layanan desain, website, dan video AlexPicture" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "AlexPicture Marketplace",
+    title: "AlexPicture — Desain, Website & Video untuk Bisnis",
     description: SITE.description,
   },
   appleWebApp: {
