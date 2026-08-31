@@ -4,9 +4,9 @@
 export const SITE = {
   name: "AlexPicture",
   fullName: "AlexPicture Marketplace",
-  tagline: "Mitra produksi kreatif berstandar industri",
+  tagline: "Solusi desain, website, dan video untuk bisnis",
   description:
-    "Jasa desain grafis, video komersial, website full-stack & web apps custom, add-on, dan paket retainer bulanan — harga transparan ala marketplace, kualitas ala agensi.",
+    "Jasa desain grafis, video komersial, website, landing page, dan kebutuhan kreatif bisnis — dengan proses yang jelas dan harga yang mudah dipahami.",
   address: "Jl. Persil, Karyamulya, Kec. Kesambi, Kota Cirebon, Jawa Barat",
   hours: "Senin–Sabtu, 08.00–20.00 WIB",
   hoursShort: "Sen–Sab 08.00–20.00 WIB",
