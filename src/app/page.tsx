@@ -32,49 +32,49 @@ import { Link, useHashRoute } from "@/lib/router";
 
 const META: Record<string, { title: string; description: string }> = {
   "/": {
-    title: "AlexPicture Marketplace — Jasa Desain, Video & Website Profesional",
+    title: "AlexPicture — Desain, Website & Video untuk Bisnis",
     description:
-      "Marketplace jasa kreatif profesional: desain grafis, video komersial, website full-stack, add-on, dan retainer bulanan. Harga transparan, checkout via WhatsApp.",
+      "Buat kebutuhan desain, website, landing page, dan video komersial bisnis Anda lebih siap digunakan. Pilih layanan, lihat hasilnya, lalu pesan sesuai kebutuhan.",
   },
   "/katalog": {
     title: "Katalog Layanan Kreatif",
-    description: "Telusuri 29 layanan kreatif: desain grafis, video, website, add-on, dan paket retainer bulanan dengan harga transparan.",
+    description: "Temukan layanan desain, video, website, add-on, dan paket bulanan dengan rincian layanan dan harga yang jelas.",
   },
   "/langganan": {
     title: "Paket Bulanan — Produksi Konten Rutin",
-    description: "Paket bulanan (retainer) produksi konten tanpa rekrut tim in-house — Starter, Growth, dan Pro dengan kuota desain, video, dan SLA respons jelas.",
+    description: "Paket produksi bulanan untuk kebutuhan desain dan video yang dikerjakan secara rutin tanpa perlu membangun tim sendiri.",
   },
   "/keranjang": {
-    title: "Keranjang & Checkout",
-    description: "Keranjang modular multi-jenis layanan + form brief — checkout langsung via WhatsApp.",
+    title: "Keranjang & Pesanan",
+    description: "Periksa layanan yang Anda pilih, lengkapi brief, lalu lanjutkan pesanan melalui WhatsApp.",
   },
   "/portofolio": {
-    title: "Portofolio Karya",
-    description: "Galeri contoh karya desain, video, dan website produksi AlexPicture.",
+    title: "Portofolio AlexPicture",
+    description: "Lihat contoh pekerjaan desain, video komersial, website, dan materi promosi AlexPicture.",
   },
   "/tentang": {
     title: "Tentang AlexPicture",
-    description: "Mitra produksi kreatif berstandar industri dari Cirebon — cepat, transparan, bergaransi.",
+    description: "Kenali AlexPicture dan layanan kreatif yang kami sediakan untuk membantu kebutuhan bisnis Anda.",
   },
   "/faq": {
-    title: "FAQ — Pertanyaan Umum",
-    description: "Jawaban atas pertanyaan umum: cara order, pembayaran, revisi, estimasi, dan kontrak retainer.",
+    title: "FAQ — Pertanyaan yang Sering Ditanyakan",
+    description: "Jawaban tentang cara pesan, pembayaran, revisi, waktu pengerjaan, dan paket bulanan AlexPicture.",
   },
   "/kebijakan-privasi": {
     title: "Kebijakan Privasi",
-    description: "Kebijakan privasi AlexPicture sesuai UU PDP No. 27/2022 — data apa yang kami proses dan hak Anda.",
+    description: "Informasi tentang data yang diproses AlexPicture dan bagaimana data tersebut digunakan.",
   },
   "/syarat-ketentuan": {
     title: "Syarat & Ketentuan",
-    description: "Syarat layanan, kebijakan pembayaran, revisi, lisensi aset, dan refund layanan kreatif AlexPicture.",
+    description: "Ketentuan pemesanan, pembayaran, revisi, penggunaan aset, dan penyelesaian layanan AlexPicture.",
   },
   "/terima-kasih": {
     title: "Terima Kasih — Pesanan Diterima",
-    description: "Pesanan Anda telah dicatat. Simpan Order ID untuk melacak progres pesanan.",
+    description: "Pesanan Anda sudah dicatat. Simpan Order ID untuk memudahkan pengecekan pesanan.",
   },
   "/lacak-pesanan": {
     title: "Lacak Pesanan",
-    description: "Cek status pesanan Anda dengan Order ID — tanpa perlu login.",
+    description: "Periksa status pesanan menggunakan Order ID Anda.",
   },
 };
 
@@ -117,7 +117,7 @@ export default function Page() {
         <PackageSearch className="h-12 w-12 text-primary" aria-hidden />
         <h1 className="text-2xl font-bold">Halaman tidak ditemukan</h1>
         <p className="max-w-md text-sm text-muted-foreground">
-          Alamat yang Anda tuju tidak tersedia. Mari kembali ke beranda atau telusuri katalog layanan.
+          Halaman yang Anda cari tidak tersedia. Kembali ke beranda atau lihat katalog layanan.
         </p>
         <div className="mt-2 flex gap-3">
           <Button asChild>
