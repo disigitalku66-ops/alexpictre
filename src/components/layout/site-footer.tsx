@@ -23,9 +23,9 @@ export function SiteFooter() {
       <div className="border-b border-stone-800">
         <div className="mx-auto grid max-w-7xl grid-cols-1 gap-4 px-4 py-6 sm:grid-cols-3 lg:px-8">
           {[
-            { title: "Harga Transparan", desc: "Semua harga tampil jelas — tanpa biaya tersembunyi." },
-            { title: "Garansi Deliverable", desc: "Setiap order disertai daftar hasil yang jelas." },
-            { title: "Transaksi via WhatsApp", desc: "Checkout aman — data hanya dikirim ke WA resmi." },
+            { title: "Harga Jelas", desc: "Harga layanan bisa dilihat sebelum Anda memesan." },
+            { title: "Hasil Pesanan Jelas", desc: "Setiap layanan mencantumkan hasil yang akan Anda terima." },
+            { title: "Pesan via WhatsApp", desc: "Setelah memilih layanan, lanjutkan pesanan melalui WhatsApp resmi." },
           ].map((t) => (
             <div key={t.title} className="flex items-start gap-3">
               <ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-amber-400" aria-hidden />
@@ -51,8 +51,7 @@ export function SiteFooter() {
             </span>
           </div>
           <p className="mt-3 text-sm leading-relaxed text-stone-400">
-            Layanan kreatif untuk membantu bisnis tampil lebih profesional melalui desain,
-            website, dan video komersial.
+            Desain, website, dan video untuk membantu bisnis Anda tampil lebih siap dan profesional.
           </p>
           <div className="mt-4 space-y-2.5 text-sm">
             <p className="flex items-start gap-2">
@@ -67,8 +66,8 @@ export function SiteFooter() {
         </div>
 
         {/* Kolom 2: Jelajahi */}
-        <nav aria-label="Tautan jelajahi">
-          <h3 className="text-sm font-bold uppercase tracking-wide text-stone-100">Jelajahi</h3>
+        <nav aria-label="Tautan navigasi">
+          <h3 className="text-sm font-bold uppercase tracking-wide text-stone-100">Menu</h3>
           <ul className="mt-4 space-y-2.5 text-sm">
             {EXPLORE_LINKS.map((l) => (
               <li key={l.to}>
@@ -122,7 +121,7 @@ export function SiteFooter() {
       {/* Baris bawah */}
       <div className="border-t border-stone-800">
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-2 px-4 py-4 pb-24 text-xs text-stone-500 sm:flex-row lg:px-8 md:pb-4">
-          <p>© {new Date().getFullYear()} AlexPicture. Dibuat dengan standar industri di Cirebon.</p>
+          <p>© {new Date().getFullYear()} AlexPicture. Dibuat untuk membantu bisnis dari Cirebon.</p>
           <div className="flex items-center gap-4">
             <Link to="/kebijakan-privasi" className="transition-colors hover:text-amber-400">
               Kebijakan Privasi
