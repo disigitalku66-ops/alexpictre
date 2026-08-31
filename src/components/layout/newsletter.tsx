@@ -18,31 +18,30 @@ export function NewsletterStrip() {
     e.preventDefault();
     const value = email.trim();
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
-      toast.error("Format email belum benar", { description: "cth: nama@bisnis.com" });
+      toast.error("Format email belum benar", { description: "Contoh: nama@bisnis.com" });
       return;
     }
     setDone(true);
-    toast.success("Berhasil berlangganan", {
-      description: "Janji kami: hanya tips & insight terbaik, tanpa spam.",
+    toast.success("Email berhasil didaftarkan", {
+      description: "Kami hanya mengirim tips dan insight yang relevan, tanpa spam.",
     });
   }
 
   return (
-    <section aria-label="Newsletter & tips kreatif" className="border-t bg-accent/60 dark:bg-accent/30">
+    <section aria-label="Tips kreatif dan inspirasi bisnis" className="border-t bg-accent/60 dark:bg-accent/30">
       <div className="mx-auto flex max-w-7xl flex-col items-center gap-4 px-4 py-8 sm:flex-row sm:justify-between lg:px-8">
         <div className="max-w-xl">
           <h2 className="flex items-center gap-2 text-lg font-bold text-foreground sm:text-xl">
             <MailCheck className="h-5 w-5 text-primary" aria-hidden />
-            Tips Kreatif &amp; Inspirasi Bisnis
+            Tips Kreatif untuk Bisnis
           </h2>
           <p className="mt-1 text-sm text-muted-foreground">
-            Ide, tips, dan insight seputar desain, website, video, dan pemasaran digital untuk
-            membantu bisnis Anda tampil lebih baik.
+            Dapatkan tips praktis tentang desain, website, video, dan pemasaran digital yang bisa langsung Anda gunakan.
           </p>
         </div>
         {done ? (
           <p className="rounded-full bg-primary/10 px-4 py-2 text-sm font-semibold text-primary">
-            Terima kasih! Email Anda sudah terdaftar.
+            Terima kasih. Email Anda sudah terdaftar.
           </p>
         ) : (
           <form onSubmit={subscribe} className="flex w-full max-w-md gap-2" role="subscribe">
@@ -60,7 +59,7 @@ export function NewsletterStrip() {
             />
             <Button type="submit" className="h-11 shrink-0">
               <Send className="h-4 w-4" aria-hidden />
-              <span className="hidden sm:inline">Langganan</span>
+              <span className="hidden sm:inline">Dapatkan Tips</span>
             </Button>
           </form>
         )}
