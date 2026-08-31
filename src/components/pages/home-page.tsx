@@ -65,10 +65,10 @@ const POPULAR_ITEMS: CatalogItem[] = POPULAR_SLUGS.map(getItem).filter((i): i is
 const NEW_ITEMS: CatalogItem[] = NEW_SLUGS.map(getItem).filter((i): i is CatalogItem => i !== undefined);
 
 const USP_ITEMS = [
-  { icon: BadgePercent, title: "Harga Mulai 10 Riban", desc: "Harga tampil jelas sejak awal" },
-  { icon: RefreshCcw, title: "Revisi Terstruktur", desc: "Kuota revisi jelas tiap layanan" },
-  { icon: Zap, title: "Respons Cepat", desc: "Chat dibalas di jam kerja" },
-  { icon: ShieldCheck, title: "Garansi Deliverable", desc: "Hasil sesuai daftar, atau diperbaiki" },
+  { icon: BadgePercent, title: "Harga Mulai Rp10 Ribu", desc: "Harga sudah terlihat sebelum Anda pesan" },
+  { icon: RefreshCcw, title: "Revisi Jelas", desc: "Batas revisi tercantum di tiap layanan" },
+  { icon: Zap, title: "Respons Cepat", desc: "Pesan dibalas pada jam kerja" },
+  { icon: ShieldCheck, title: "Hasil Sesuai Pesanan", desc: "Deliverable mengikuti rincian layanan" },
 ] as const;
 
 /** Chip hero — klik menuju katalog terfilter (R3 poin 5). */
@@ -164,14 +164,13 @@ function HeroSection() {
         {/* Kolom teks (60%) */}
         <div className="min-w-0">
           <p className="inline-flex items-center rounded-full border border-amber-500/30 bg-amber-500/10 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.18em] text-amber-400">
-            Jasa Layanan Digital Kreatif
+            Desain, Website &amp; Video untuk Bisnis
           </p>
           <h1 className="mt-4 text-balance text-3xl font-extrabold leading-[1.12] tracking-tight text-stone-50 sm:text-4xl lg:text-5xl">
-            Creative Services for Growing Businesses.
+            Buat Bisnis Anda Terlihat Lebih Profesional.
           </h1>
           <p className="mt-4 max-w-xl text-sm leading-relaxed text-stone-300 sm:text-base">
-            Layanan desain grafis, pembuatan website, dan video komersial untuk membantu bisnis
-            tampil lebih profesional dengan materi pemasaran yang siap digunakan.
+            Desain, website, dan video komersial yang dibuat untuk kebutuhan bisnis Anda — dengan proses yang jelas dan hasil yang siap digunakan.
           </p>
           <div className="mt-6 flex flex-col gap-3 sm:flex-row">
             <Button asChild size="lg" className="h-12 px-6 text-base font-bold">
@@ -233,7 +232,7 @@ const CATEGORY_CARDS: CategoryCard[] = [
   {
     key: "desain",
     title: "Desain & Branding",
-    desc: "Logo, identitas visual, materi media sosial, dan berbagai kebutuhan desain bisnis.",
+    desc: "Logo, identitas visual, konten media sosial, dan kebutuhan desain bisnis.",
     image: "/images/cat-desain.png",
     to: "/katalog?kategori=desain",
     cta: "Lihat Layanan",
@@ -251,7 +250,7 @@ const CATEGORY_CARDS: CategoryCard[] = [
   {
     key: "website",
     title: "Website & Web Apps",
-    desc: "Website profesional, landing page, dan aplikasi web untuk kebutuhan bisnis.",
+    desc: "Website, landing page, dan aplikasi web untuk menjelaskan serta mendukung bisnis Anda.",
     image: "/images/cat-web.png",
     to: "/katalog?kategori=website",
     cta: "Lihat Layanan",
@@ -260,7 +259,7 @@ const CATEGORY_CARDS: CategoryCard[] = [
   {
     key: "ad-creative",
     title: "Ad Creative",
-    desc: "Materi visual iklan yang dirancang untuk menarik perhatian dan menyampaikan pesan dengan cepat.",
+    desc: "Materi visual iklan yang membantu pesan produk atau layanan lebih cepat dipahami.",
     image: "/images/mockup-iklan.png",
     to: "/katalog?koleksi=ad-creative",
     cta: "Lihat Layanan",
@@ -269,7 +268,7 @@ const CATEGORY_CARDS: CategoryCard[] = [
   {
     key: "retainer",
     title: "Paket Bulanan",
-    desc: "Kuota desain, video, dan materi iklan setiap bulan — dalam satu paket langganan.",
+    desc: "Produksi desain dan video secara rutin dalam satu paket bulanan.",
     image: "/images/cat-langganan.png",
     to: "/langganan",
     cta: "Lihat Paket",
@@ -281,8 +280,8 @@ function CategorySection() {
   return (
     <Section label="Layanan Kreatif" className="py-10 sm:py-12">
       <SectionHeading
-        title="Layanan Kreatif"
-        subtitle="Pilih layanan untuk mengembangkan tampilan dan pemasaran bisnis Anda."
+        title="Layanan untuk Bisnis Anda"
+        subtitle="Pilih kebutuhan Anda: desain, video, website, iklan, atau paket bulanan."
         href="/katalog"
         actionLabel="Lihat Semua"
       />
@@ -381,7 +380,7 @@ function BundleCard({ bundle, index }: { bundle: BundleDeal; index: number }) {
           <p className="mt-2 text-[11px] leading-relaxed text-muted-foreground">{bundle.desc}</p>
           <div className="mt-auto pt-4">
             <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
-              Total semua kebutuhan dalam satu kali order
+              Total kebutuhan dalam satu kali order
             </p>
             <p className="text-xl font-extrabold tabular-nums text-foreground sm:text-2xl">{formatIDR(total)}</p>
             <Button className="mt-3 h-11 w-full font-bold" onClick={ambilPaket}>
@@ -396,16 +395,16 @@ function BundleCard({ bundle, index }: { bundle: BundleDeal; index: number }) {
 
 function DealsSection() {
   return (
-    <Section label="Deals hari ini" className="py-10 sm:py-12">
+    <Section label="Penawaran saat ini" className="py-10 sm:py-12">
       <div className="mb-4 flex flex-wrap items-end justify-between gap-x-4 gap-y-3 sm:mb-6">
         <SectionHeading
-          title="Deals Hari Ini"
-          subtitle="Paket bundling pilihan — lengkapi kebutuhan Anda dalam satu kali order"
+          title="Penawaran Saat Ini"
+          subtitle="Paket pilihan untuk menggabungkan beberapa kebutuhan dalam satu pesanan."
           className="mb-0 sm:mb-0"
         />
         <div className="flex items-center gap-2 sm:gap-3">
           <Badge className="rounded-md bg-red-600 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide text-white">
-            Limited time
+            Terbatas
           </Badge>
           <Countdown />
         </div>
@@ -417,7 +416,7 @@ function DealsSection() {
           ))}
         </div>
         <p className="mt-4 text-center text-xs text-red-800/80 dark:text-red-300/80">
-          Daftar paket bundling berganti setiap Senin pukul 00.00 WIB.
+          Daftar paket diperbarui setiap Senin pukul 00.00 WIB.
         </p>
       </div>
     </Section>
@@ -431,7 +430,7 @@ function FeaturedSection() {
     <Section label="Pilihan layanan" className="py-10 sm:py-12">
       <SectionHeading
         title="Pilihan Layanan"
-        subtitle="Layanan terlaris & nilai terbaik — dapat disesuaikan dengan kebutuhan bisnis Anda."
+        subtitle="Beberapa layanan yang paling sering dipilih untuk kebutuhan bisnis."
         href="/katalog"
         actionLabel="Lihat Semua"
       />
@@ -452,7 +451,7 @@ function PromoSection() {
   const showBrief = useBrief((s) => s.show);
 
   return (
-    <Section label="Penawaran lainnya" className="py-10 sm:py-12">
+    <Section label="Pilihan lain" className="py-10 sm:py-12">
       <div className="grid gap-4 md:grid-cols-2">
         {/* Panel kiri — paket bulanan */}
         <motion.div {...FADE_UP} transition={{ duration: 0.28, ease: "easeOut" }}>
@@ -461,10 +460,10 @@ function PromoSection() {
               <Sparkles className="h-5 w-5" aria-hidden />
             </span>
             <h3 className="mt-4 text-lg font-bold text-amber-950 dark:text-amber-100 sm:text-xl">
-              Butuh Konten untuk Sebulan?
+              Butuh Produksi Konten Rutin?
             </h3>
             <p className="mt-2 text-sm leading-relaxed text-amber-900/80 dark:text-amber-200/80">
-              Buat kebutuhan desain konten bisnis Anda lebih terencana dengan paket produksi bulanan.
+              Jika kebutuhan desain dan video muncul setiap bulan, paket bulanan membantu Anda mengaturnya dalam satu layanan.
             </p>
             <div className="mt-auto pt-5">
               <Button asChild variant="outline" className="h-11 border-amber-300 bg-white/80 font-semibold text-amber-900 hover:bg-white hover:text-amber-800 dark:border-amber-800 dark:bg-amber-950/60 dark:text-amber-100 dark:hover:bg-amber-900/60">
@@ -483,11 +482,10 @@ function PromoSection() {
               <ArrowUpRight className="h-5 w-5" aria-hidden />
             </span>
             <h3 className="mt-4 text-lg font-bold text-emerald-950 dark:text-emerald-100 sm:text-xl">
-              Punya Website yang Ingin Dibuat?
+              Ingin Membuat Website?
             </h3>
             <p className="mt-2 text-sm leading-relaxed text-emerald-900/80 dark:text-emerald-200/80">
-              Ceritakan kebutuhan Anda. Kami bantu mengubah ide, informasi, dan kebutuhan bisnis
-              menjadi website yang siap digunakan.
+              Ceritakan kebutuhan Anda. Kami bantu menentukan jenis website, isi, dan layanan yang sesuai.
             </p>
             <div className="mt-auto pt-5">
               <Button
@@ -537,10 +535,10 @@ function NeedSection() {
   const showBrief = useBrief((s) => s.show);
 
   return (
-    <Section label="Layanan untuk kebutuhan Anda" className="py-10 sm:py-12">
+    <Section label="Kebutuhan bisnis Anda" className="py-10 sm:py-12">
       <SectionHeading
-        title="Layanan untuk Kebutuhan Anda"
-        subtitle="Tidak yakin harus mulai dari mana? Pilih berdasarkan kebutuhan bisnis Anda."
+        title="Mulai dari Kebutuhan Anda"
+        subtitle="Belum tahu layanan yang tepat? Pilih kebutuhan yang paling dekat dengan kondisi bisnis Anda."
       />
       <div className="grid gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-4">
         {NEED_CARDS.map((card, i) => (
@@ -578,7 +576,7 @@ function NewArrivalsSection() {
     <Section label="Layanan terbaru" className="py-10 sm:py-12">
       <SectionHeading
         title="Baru di AlexPicture"
-        subtitle="Layanan yang baru saja bergabung di katalog"
+        subtitle="Layanan yang baru ditambahkan ke katalog."
         href="/katalog"
         actionLabel="Lihat Semua"
       />
@@ -603,11 +601,10 @@ function FinalCtaSection() {
           <WhatsAppIcon className="h-6 w-6" />
         </span>
         <h2 className="mt-4 text-balance text-2xl font-extrabold tracking-tight text-stone-50 sm:text-3xl">
-          Punya Ide? Mari Kita Wujudkan.
+          Punya Kebutuhan? Mari Kita Bahas.
         </h2>
         <p className="mt-3 max-w-xl text-sm leading-relaxed text-stone-300 sm:text-base">
-          Ceritakan kebutuhan bisnis Anda. Kami bantu menentukan layanan yang paling sesuai — mulai
-          dari desain, website, hingga video komersial.
+          Ceritakan apa yang ingin Anda buat. Kami bantu menentukan layanan yang paling sesuai, mulai dari desain, website, hingga video komersial.
         </p>
         <div className="mt-6 flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
           <Button asChild size="lg" className="h-12 bg-[#25D366] px-6 text-base font-bold text-white hover:bg-[#1eb757]">
