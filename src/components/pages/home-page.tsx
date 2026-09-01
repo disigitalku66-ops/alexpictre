@@ -164,13 +164,13 @@ function HeroSection() {
         {/* Kolom teks (60%) */}
         <div className="min-w-0">
           <p className="inline-flex items-center rounded-full border border-amber-500/30 bg-amber-500/10 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.18em] text-amber-400">
-            Desain, Website &amp; Video untuk Bisnis
+            DESAIN • VIDEO • WEBSITE
           </p>
           <h1 className="mt-4 text-balance text-3xl font-extrabold leading-[1.12] tracking-tight text-stone-50 sm:text-4xl lg:text-5xl">
-            Buat Bisnis Anda Terlihat Lebih Profesional.
+            Desain, Website &amp; Video untuk Bisnis Anda
           </h1>
           <p className="mt-4 max-w-xl text-sm leading-relaxed text-stone-300 sm:text-base">
-            Desain, website, dan video komersial yang dibuat untuk kebutuhan bisnis Anda — dengan proses yang jelas dan hasil yang siap digunakan.
+            Tidak perlu mencari jasa desain, video, dan website di tempat berbeda. AlexPicture membantu menyiapkan berbagai kebutuhan kreatif bisnis Anda dalam satu tempat.
           </p>
           <div className="mt-6 flex flex-col gap-3 sm:flex-row">
             <Button asChild size="lg" className="h-12 px-6 text-base font-bold">
@@ -232,7 +232,7 @@ const CATEGORY_CARDS: CategoryCard[] = [
   {
     key: "desain",
     title: "Desain & Branding",
-    desc: "Logo, identitas visual, konten media sosial, dan kebutuhan desain bisnis.",
+    desc: "Logo, identitas visual, kemasan, dan berbagai kebutuhan desain bisnis.",
     image: "/images/cat-desain.png",
     to: "/katalog?kategori=desain",
     cta: "Lihat Layanan",
@@ -241,7 +241,7 @@ const CATEGORY_CARDS: CategoryCard[] = [
   {
     key: "video",
     title: "Video Komersial",
-    desc: "Video promosi untuk produk, layanan, iklan, dan kebutuhan konten bisnis.",
+    desc: "Video untuk promosi produk, iklan, media sosial, atau kebutuhan bisnis lainnya.",
     image: "/images/cat-video.png",
     to: "/katalog?kategori=video",
     cta: "Lihat Layanan",
@@ -249,8 +249,8 @@ const CATEGORY_CARDS: CategoryCard[] = [
   },
   {
     key: "website",
-    title: "Website & Web Apps",
-    desc: "Website, landing page, dan aplikasi web untuk menjelaskan serta mendukung bisnis Anda.",
+    title: "Website & Web App",
+    desc: "Landing page, website bisnis, katalog, sampai aplikasi web sesuai kebutuhan.",
     image: "/images/cat-web.png",
     to: "/katalog?kategori=website",
     cta: "Lihat Layanan",
@@ -259,7 +259,7 @@ const CATEGORY_CARDS: CategoryCard[] = [
   {
     key: "ad-creative",
     title: "Ad Creative",
-    desc: "Materi visual iklan yang membantu pesan produk atau layanan lebih cepat dipahami.",
+    desc: "Materi visual untuk iklan Meta, TikTok, marketplace, dan berbagai kanal promosi.",
     image: "/images/mockup-iklan.png",
     to: "/katalog?koleksi=ad-creative",
     cta: "Lihat Layanan",
@@ -268,7 +268,7 @@ const CATEGORY_CARDS: CategoryCard[] = [
   {
     key: "retainer",
     title: "Paket Bulanan",
-    desc: "Produksi desain dan video secara rutin dalam satu paket bulanan.",
+    desc: "Butuh desain secara rutin? Satu paket untuk berbagai kebutuhan kreatif setiap bulan.",
     image: "/images/cat-langganan.png",
     to: "/langganan",
     cta: "Lihat Paket",
@@ -280,8 +280,8 @@ function CategorySection() {
   return (
     <Section label="Layanan Kreatif" className="py-10 sm:py-12">
       <SectionHeading
-        title="Layanan untuk Bisnis Anda"
-        subtitle="Pilih kebutuhan Anda: desain, video, website, iklan, atau paket bulanan."
+        title="Butuh Dibuatkan Apa?"
+        subtitle="Desain, video, website, sampai kebutuhan konten bulanan — pilih saja yang paling sesuai."
         href="/katalog"
         actionLabel="Lihat Semua"
       />
