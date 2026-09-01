@@ -60,7 +60,11 @@ const CATEGORY_ICONS: Record<string, React.ComponentType<{ className?: string }>
 };
 
 const POPULAR_ITEMS: CatalogItem[] = POPULAR_SLUGS.map(getItem).filter((i): i is CatalogItem => i !== undefined);
-const NEW_ITEMS: CatalogItem[] = NEW_SLUGS.map(getItem).filter((i): i is CatalogItem => i !== undefined);
+// Jangan tampilkan addon migrasi konten pada section "Baru".
+// Master data katalog tetap utuh; pengecualian hanya berlaku di beranda.
+const NEW_ITEMS: CatalogItem[] = NEW_SLUGS.filter((slug) => slug !== "addon-migrasi-konten")
+  .map(getItem)
+  .filter((i): i is CatalogItem => i !== undefined);
 
 const USP_ITEMS = [
   { icon: BadgePercent, title: "Harga Mulai 10 Ribuan", desc: "Mulai dari Rp10.000" },
@@ -139,8 +143,14 @@ function HeroPortfolioReel() {
               <motion.div
                 className="flex flex-col gap-2"
                 initial={{ y: directionDown ? "-50%" : "0%" }}
-                animate={{ y: directionDown ? "0%" : "-50%" }}
-                transition={{ duration: 24 + columnIndex * 3, repeat: Infinity, ease: "linear" }}
+                animate={{ y: directionDown ? ["-50%", "0%"] : ["0%", "-50%"] }}
+                transition={{
+                  duration: 12 + columnIndex * 2,
+                  repeat: Infinity,
+                  repeatType: "loop",
+                  ease: "linear",
+                }}
+                style={{ willChange: "transform" }}
               >
                 {items.map((src, i) => (
                   <div key={`${src}-${i}`} className="shrink-0 overflow-hidden rounded-xl border border-stone-700/50 bg-stone-900">
