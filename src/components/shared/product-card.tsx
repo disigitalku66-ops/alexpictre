@@ -24,16 +24,42 @@ interface ProductCardProps {
   item: CatalogItem;
   variant?: "full" | "compact";
   className?: string;
+  imageOverride?: string;
+  imageCropIndex?: number;
 }
 
 /** Kartu produk marketplace — dua varian (PRD §6.4). */
-export function ProductCard({ item, variant = "full", className }: ProductCardProps) {
+export function ProductCard({ item, variant = "full", className, imageOverride, imageCropIndex = 0 }: ProductCardProps) {
   const mounted = useMounted();
   const wishlistSlugs = useWishlistStore((s) => s.slugs);
   const toggleWishlist = useWishlistStore((s) => s.toggle);
   const wishlisted = mounted && wishlistSlugs.includes(item.slug);
 
   const href = `/produk/${item.slug}`;
+
+  const image = imageOverride ? (
+    <div
+      className="relative overflow-hidden bg-stone-200 dark:bg-stone-800"
+      style={{
+        aspectRatio: "4/3",
+        backgroundImage: `url(${imageOverride})`,
+        backgroundSize: "100% 1000%",
+        backgroundPosition: `center ${Math.max(0, Math.min(9, imageCropIndex)) * (100 / 9)}%`,
+        backgroundRepeat: "no-repeat",
+      }}
+      role="img"
+      aria-label={item.name}
+    />
+  ) : (
+    <Img
+      src={item.image}
+      alt={item.name}
+      ratio="4/3"
+      className="transition-transform duration-300 group-hover:scale-[1.03]"
+      imgClassName="group-hover:scale-[1.04] transition-transform duration-300"
+      sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+    />
+  );
 
   return (
     <div
@@ -42,17 +68,9 @@ export function ProductCard({ item, variant = "full", className }: ProductCardPr
         className
       )}
     >
-      {/* Gambar + badge + wishlist */}
       <div className="relative">
         <Link to={href} ariaLabel={`Lihat detail ${item.name}`} className="block">
-          <Img
-            src={item.image}
-            alt={item.name}
-            ratio="4/3"
-            className="transition-transform duration-300 group-hover:scale-[1.03]"
-            imgClassName="group-hover:scale-[1.04] transition-transform duration-300"
-            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-          />
+          {image}
         </Link>
         {item.badge && (
           <Badge className={cn("absolute left-2 top-2 rounded-md px-2 py-0.5 text-[11px] font-bold", BADGE_STYLE[item.badge])}>
@@ -76,7 +94,6 @@ export function ProductCard({ item, variant = "full", className }: ProductCardPr
         </Button>
       </div>
 
-      {/* Konten */}
       <div className="flex flex-1 flex-col p-3 sm:p-4">
         <Link to={href} className="min-w-0">
           <p className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
@@ -132,7 +149,6 @@ export function ProductCard({ item, variant = "full", className }: ProductCardPr
   );
 }
 
-// Toast helper kecil agar tidak menambah dependensi di beberapa tempat
 function toastWishlist(on: boolean) {
   import("sonner").then(({ toast }) => {
     if (on) toast.success("Ditambahkan ke wishlist");
